@@ -1,59 +1,7 @@
-# pygame.init()
-
-# width=600
-# height=400
-# screen=pygame.display.set_mode((width,height))
-# pygame.display.set_caption("Menu")
-
-# WHITE = (255, 255, 255)
-# GRAY = (200, 200, 200)
-# BLUE = (50, 150, 255)
-# BLACK = (0, 0, 0)
-
-# font=pygame.font.Font(None, 40)
-
-# menu_items=["Start","Setting", "Quit"]
-# buttons=[]
-# buttonsWidth=200
-# buttonsHeight=50
-# start_y=120
-
-# for i, text in enumerate(menu_items):
-#     x=(width-buttonsWidth)//2
-#     y=start_y+i*(buttonsHeight+20)
-#     rect=pygame.Rect(x,y,buttonsWidth, buttonsHeight)
-#     buttons.append((rect,text))
-
-# def drawMenu():
-#     screen.fill(WHITE)
-#     for rect, text in buttons:
-#         pygame.draw.rect(screen,GRAY,rect,border_radius=10)
-#         label=font.render(text, True, BLACK)
-#         screen.blit(label,(rect.x+70,rect.y+10))
-#     pygame.display.flip()
-
-# running=True
-# while running:
-#     drawMenu()
-#     for event in pygame.event.get():
-#         if event.type==pygame.QUIT:
-#             running=False
-#         elif event.type==pygame.MOUSEBUTTONDOWN:
-#             x,y=event.pos
-#             for rect, text in buttons:
-#                 if rect.collidepoint(x,y):
-#                     if text=="Start":
-#                         print("Start")
-#                     elif text=="Setting":
-#                         print("Setting")
-#                     elif text=="Quit":
-#                         print("Quit")
-#                         running=False
-
-# pygame.quit()
-
 import pygame
 import sys
+import index
+
 
 pygame.init()
 
@@ -121,6 +69,7 @@ while running:
         elif event.type==pygame.MOUSEBUTTONDOWN:
             if buttonStart.collidepoint(mouseX,mouseY):
                 print("Start")
+                index.start()
             if buttonSetting.collidepoint(mouseX,mouseY):
                 print("Setting")
             if buttonQuit.collidepoint(mouseX,mouseY):
