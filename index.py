@@ -40,15 +40,13 @@ crossWidth = 25
 # Đánh dấu ô đó là Người chơi hay AI đánh
 
 # Kiểm tra các ô trống
+
 # Kiểm tra bảng đầy
 
 # Kiểm tra bên nào đã thắng
 
-# def markSquare(row, col, player):
-#     board[row][col] = player
-# # Kiểm tra các ô trống
-# def availableSquare(row,col):
-#     return board[row][col] == 0
+# Kiểm tra các ô trống
+
 # Kiểm tra bảng đầy
 
 # Kiểm tra bên nào đã thắng
