@@ -124,4 +124,4 @@ def start():
         pygame.display.update()
         pygame.time.Clock().tick(FPS)
 
-# start()
+start()
