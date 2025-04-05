@@ -68,7 +68,7 @@ def restartGame(screen,board):
             board[row][col]=0
 
 
-def start():
+def start(algorithm):
     player=1
     gameOver=False
 
@@ -99,12 +99,25 @@ def start():
                         gameOver=True
                     player=player%2+1
                 # AI đánh
-                    if not gameOver and not isBoardFull(board,boardRows, boardCols):
-                        # if AStar(board,boardRows,boardCols):
-                        # if bestMove(board,boardRows,boardCols):
-                        # if bestMoveBFS(board,boardRows,boardCols):
-                        moveMode= bestMoveMiniMax(board,boardRows,boardCols)
-                        if moveMode and checkWin(board,player=2,boardRows=boardRows,boardCols=boardCols):
+                    if not gameOver:
+                        if(algorithm == "Astar"):
+                            if bestMoveBFS(board,boardRows,boardCols):
+                                if checkWin(board,player=2):
+                                 gameOver=True
+                                player=player%2+1
+                        if(algorithm == "BestFirstSearch"):
+                            if bestMoveBFS(board,boardRows,boardCols):
+                                if checkWin(board,player=2):
+                                 gameOver=True
+                                player=player%2+1
+                        if(algorithm == "MiniMax"):
+                            if bestMoveBFS(board,boardRows,boardCols):
+                                if checkWin(board,player=2):
+                                 gameOver=True
+                                player=player%2+1
+                   
+                    if not gameOver:
+                        if isBoardFull(board,boardRows, boardCols):
                             gameOver=True
                         player=player%2+1
             if event.type==pygame.KEYDOWN:   
@@ -112,6 +125,14 @@ def start():
                     restartGame(screen,board)
                     gameOver=False           
                     player=1  
+                if event.key==pygame.K_s:
+                    from settings import settings
+                    algo = settings()
+                    if algo and algo != "Back":
+                        start(algo)
+                if event.key==pygame.K_q:
+                    pygame.quit()
+                    sys.exit()    
         if not gameOver:
             drawFigures(screen,board,boardRows,squareSize,boardCols,White,crossWidth,circleRadius,circleWidth)
         else:

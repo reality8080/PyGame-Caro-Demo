@@ -1,8 +1,7 @@
 import pygame
 import sys
 import index
-
-
+import settings
 
 pygame.init()
 
@@ -70,10 +69,13 @@ while running:
         elif event.type==pygame.MOUSEBUTTONDOWN:
             if buttonStart.collidepoint(mouseX,mouseY):
                 print("Start")
-                index.start()
-            if buttonSetting.collidepoint(mouseX,mouseY):
+                index.start("MiniMax")
+            if buttonSetting.collidepoint(mouseX, mouseY):
                 print("Setting")
-                
+                algo = settings.settings()
+                if algo:  
+                    index.start(algo)
+
             if buttonQuit.collidepoint(mouseX,mouseY):
                 print("Quit")
                 running=False
