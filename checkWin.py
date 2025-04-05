@@ -1,9 +1,9 @@
-boardRows = 4
-boardCols = 4
+# boardRows = 4
+# boardCols = 4
 
-def checkWin(checkBoard,player):
-    winCondition = boardCols if boardCols >= boardCols else boardCols-1 # Sửa số quân cần thắng
-
+def checkWin(checkBoard,player,boardRows,boardCols):
+    # winCondition = boardCols if boardCols >= boardCols else boardCols-1 # Sửa số quân cần thắng
+    winCondition = min(5, min(boardRows, boardCols))
     # Kiểm tra hàng ngang
     for row in range(boardRows):
         for col in range(boardCols - winCondition + 1):

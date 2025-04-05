@@ -3,6 +3,7 @@ import sys
 import index
 
 
+
 pygame.init()
 
 def drawButton(button, text, isHover):
@@ -72,6 +73,7 @@ while running:
                 index.start()
             if buttonSetting.collidepoint(mouseX,mouseY):
                 print("Setting")
+                
             if buttonQuit.collidepoint(mouseX,mouseY):
                 print("Quit")
                 running=False

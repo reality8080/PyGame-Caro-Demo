@@ -3,6 +3,8 @@ import numpy as np
 import pygame
 from collections import deque
 
+import asyncio
+
 # from InformedSearch.AStar import AStar
 from checkWin import checkWin
 from InformedSearch.miniMax import bestMoveMiniMax
@@ -27,8 +29,8 @@ HEIGHT = 600
 # Duong ke
 LINEWIDTH = 5
 FPS = 60
-boardRows = 4
-boardCols = 4
+boardRows =5
+boardCols = 5
 # Kich thuoc o
 squareSize= WIDTH//boardCols
 circleRadius = squareSize//3
@@ -55,7 +57,8 @@ crossWidth = 25
 
 # khởi tạo game
 
-
+async def callMiniMax(board,boardRows,boardCols):
+    return await bestMoveMiniMax(board,boardRows,boardCols)
 
 def restartGame(screen,board):
     screen.fill(Black)
@@ -90,20 +93,20 @@ def start():
                 # Người chơi
                 if availableSquare(board,mouseY,mouseX):
                     markSquare(board,mouseY,mouseX, player)
-                    if checkWin(checkBoard=board,player=player):
+                    if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
+                        gameOver=True
+                    elif isBoardFull(board, boardRows, boardCols):
                         gameOver=True
                     player=player%2+1
                 # AI đánh
-                    if not gameOver:
+                    if not gameOver and not isBoardFull(board,boardRows, boardCols):
                         # if AStar(board,boardRows,boardCols):
                         # if bestMove(board,boardRows,boardCols):
-                        if bestMoveBFS(board,boardRows,boardCols):
-                            if checkWin(board,player=2):
-                                gameOver=True
-                            player=player%2+1
-                    if not gameOver:
-                        if isBoardFull(board,boardRows, boardCols):
+                        # if bestMoveBFS(board,boardRows,boardCols):
+                        moveMode= bestMoveMiniMax(board,boardRows,boardCols)
+                        if moveMode and checkWin(board,player=2,boardRows=boardRows,boardCols=boardCols):
                             gameOver=True
+                        player=player%2+1
             if event.type==pygame.KEYDOWN:   
                 if event.key==pygame.K_r:
                     restartGame(screen,board)
@@ -112,10 +115,10 @@ def start():
         if not gameOver:
             drawFigures(screen,board,boardRows,squareSize,boardCols,White,crossWidth,circleRadius,circleWidth)
         else:
-            if checkWin(board,1):
+            if checkWin(board,1,boardRows,boardCols):
                 drawFigures(screen,board,boardRows,squareSize,boardCols,Green,crossWidth,circleRadius,circleWidth)
                 drawLines(screen,squareSize,boardRows,Green,WIDTH,HEIGHT,LINEWIDTH)
-            elif checkWin(board,2):
+            elif checkWin(board,2,boardRows,boardCols):
                 drawFigures(screen,board,boardRows,squareSize,boardCols,Red,crossWidth,circleRadius,circleWidth)
                 drawLines(screen,squareSize,boardRows,Red,WIDTH,HEIGHT,LINEWIDTH)    
             else:
@@ -123,5 +126,5 @@ def start():
                 drawLines(screen,squareSize,boardRows,Blue,WIDTH,HEIGHT,LINEWIDTH)   
         pygame.display.update()
         pygame.time.Clock().tick(FPS)
-
-start()
+if __name__ == "__main__":
+    start()

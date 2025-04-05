@@ -10,9 +10,9 @@ def evaluateBoard(checkBoard,boardRows,boardCols):
                 score += 10
             elif checkBoard[row][col] == 1:  # Người chơi
                 score -= 10
-    if checkWin( checkBoard,2):
+    if checkWin( checkBoard,2,boardRows,boardCols):
         return 1000
-    elif checkWin( checkBoard,1):
+    elif checkWin( checkBoard,1,boardRows,boardCols):
         return -1000
     return score
 
@@ -25,7 +25,7 @@ def bestMoveBFS(board,boardRows,boardCols):
         for col in range(boardCols):
             if(board[row][col]==0):
                 board[row][col]=opponent
-                if checkWin(board,opponent):
+                if checkWin(board,opponent,boardRows,boardCols):
                     board[row][col]=0
                     markSquare(board,row,col,2)
                     return True
