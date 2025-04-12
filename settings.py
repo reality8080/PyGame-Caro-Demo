@@ -3,6 +3,7 @@ import sys
 from InformedSearch.AStar import AStar
 from InformedSearch.BestFirstSearch import bestMoveBFS
 from InformedSearch.miniMax import bestMoveMiniMax
+from InformedSearch.DeepHillClimbing import DeepHillClimbing
 pygame.init()
 
 # Mau sac
@@ -48,6 +49,7 @@ def settings():
         drawButton(buttonAStar,"A*",buttonAStar.collidepoint(mouseX,mouseY))
         drawButton(buttonBFS,"BFS",buttonBFS.collidepoint(mouseX,mouseY))
         drawButton(buttonMiniMax,"MiniMax",buttonMiniMax.collidepoint(mouseX,mouseY))
+        drawButton(buttonDHClimbing, "DHClimbing",buttonDHClimbing.collidepoint(mouseX,mouseY))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -63,6 +65,9 @@ def settings():
                 elif buttonMiniMax.collidepoint(mouseX,mouseY):
                     selectedAlgorithm = "MiniMax"
                     return "MiniMax"
+                elif buttonDHClimbing.collidepoint(mouseX,mouseY):
+                    selectedAlgorithm = "DHClimbing"
+                    return "DHClimbing"
          
         pygame.display.flip()
         pygame.time.Clock().tick(60)
@@ -72,8 +77,9 @@ buttonWidth=Width//2-100
 buttonHeight=Height//2
 space=70
 
-buttonAStar=pygame.Rect(buttonWidth,buttonHeight,200,50)
-buttonBFS=pygame.Rect(buttonWidth,buttonHeight+space,200,50)
-buttonMiniMax=pygame.Rect(buttonWidth,buttonHeight+space*2,200,50)
+buttonAStar=pygame.Rect(buttonWidth,buttonHeight,250,50)
+buttonBFS=pygame.Rect(buttonWidth,buttonHeight+space,250,50)
+buttonMiniMax=pygame.Rect(buttonWidth,buttonHeight+space*2,250,50)
+buttonDHClimbing=pygame.Rect(buttonWidth,buttonHeight+space*3,250,50)
 
 selectedAlgorithm = "MiniMax"

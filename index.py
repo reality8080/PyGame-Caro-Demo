@@ -110,6 +110,11 @@ def start(algorithm):
                                 if checkWin(board,player=2):
                                  gameOver=True
                                 player=player%2+1
+                        if(algorithm == "DHClimbing"):
+                            if bestMoveMiniMax(board,boardRows,boardCols):
+                                if checkWin(board,player=2):
+                                 gameOver=True
+                                player=player%2+1
                    
                     if not gameOver:
                         if isBoardFull(board,boardRows, boardCols):
@@ -122,8 +127,8 @@ def start(algorithm):
                 if event.key==pygame.K_s:
                     from settings import settings
                     algo = settings()
-                    if algo and algo != "Back":
-                        start(algo)
+          
+                    start(algo)
                 if event.key==pygame.K_q:
                     pygame.quit()
                     sys.exit()    
