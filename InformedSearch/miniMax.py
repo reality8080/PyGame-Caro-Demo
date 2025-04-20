@@ -6,49 +6,62 @@ import numpy as np
 from functools import lru_cache
 
 # Do sau
-maxDepth=5
+maxDepth=7
 # Moi do sau chon ra
-beamWidth=5
+beamWidth=3
 
 def evaluatePosition(board, boardRows,boardCols,player,row,col):
     winCondition = min(5, min(boardRows, boardCols))
-    allDirections=[(-1,0),(0,-1),(1,0),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
+    allDirections=[(-1,0),(0,-1),(1,0),(0,1), (-1,-1),(-1,1),(1,-1),(1,1)]
     totalScore=0
-    
     for dr,dc in allDirections:
         count = 1
-        blocked=0
-        for i in range(1, winCondition):
+        openEnds=0
+
+        i=1
+        while True:
             r,c = row + dr*i, col + dc*i
-            if 0 <= r < boardRows and 0 <= c <boardCols:
+            if (0 <= r < boardRows and 0 <= c <boardCols):
                 if board[r][c]==player:
                     count+=1
                 elif board[r][c] == 0:
+                    openEnds+=1
                     break
                 else:
-                    blocked+=1
                     break
-    
+            else:
+                break
+            i+=1
+        while True:
+            r,c = row - dr*i, col - dc*i
+            if (0 <= r < boardRows and 0 <= c <boardCols):
+                if board[r][c]==player:
+                    count+=1
+                elif board[r][c] == 0:
+                    openEnds+=1
+                    break
+                else:
+                    break
+            else:
+                break
+            i+=1
         if count >= winCondition:
             return 100000
-        score = 0
-        if count == 4 and blocked ==0:
-            score = 10000
-        elif count == 3 and blocked == 0:
-            score = 1000
-        else:
-            score = count ** 3
-            
-        r1,c1=row-dr,col-dc
-        r2,c2=row+dr*count,col+dc*count
-        openEnds=0
-        if 0<=r1<boardRows and 0<=c1<boardCols and board[r1][c1]==0:
-            openEnds+=1
-        if 0<=r2<boardRows and 0<=c2<boardCols and board[r2][c2]==0:
-            openEnds+=1
-        totalScore += score*(openEnds+1)
-    centerDist=abs(row-boardRows//2)+abs(col-boardCols//2)
-    totalScore+=(boardRows//2-centerDist)*10
+        if count == 4 and openEnds==2:
+            totalScore += 100000
+        elif count == 4 and openEnds==1:
+            totalScore+=50000
+        elif count == 3 and openEnds==2:
+            totalScore += 10000
+        elif count == 3 and openEnds==1:
+            totalScore+=3000
+        elif count == 2 and openEnds==2:
+            totalScore += 1000
+        elif count == 2 and openEnds==1:
+            totalScore+=300
+        elif count == 1 and openEnds==2:
+            totalScore += 100
+
     return totalScore
     
 def evaluateOpenness(board, row, col,dr,dc,count, player, boardRows, boardCols):
@@ -68,14 +81,14 @@ def evaluateBoard(checkBoard,boardRows,boardCols):
     for row in range(boardRows):
         for col in range(boardCols):
             if checkBoard[row][col] == 2:  # AI
-                score += evaluatePosition(checkBoard,row,col,2,boardRows,boardCols)
+                score += evaluatePosition(checkBoard,boardRows,boardCols,2,row,col)
                 if (row>=boardRows//2-1 and 
                     row <=boardRows//2+1 and 
                     col >=boardCols//2-1 and 
                     col <= boardCols//2+1):
                     score+=3
             elif checkBoard[row][col] == 1:  # Người chơi
-                score -= evaluatePosition(checkBoard,row,col,1,boardRows, boardCols)
+                score -= evaluatePosition(checkBoard,boardRows, boardCols,1,row,col)
     if checkWin( checkBoard,2,boardRows,boardCols):
         return 100000
     elif checkWin( checkBoard,1,boardRows,boardCols):
@@ -83,15 +96,17 @@ def evaluateBoard(checkBoard,boardRows,boardCols):
     return score
 
 def quickEvaluate(board, row, col, boardRows, boardCols):
- 
-    player=board[row][col]
-    opponent= 1 if player==2 else 2
+    player=2
+    opponent= 1
+    board[row][col] = player
     attackScore = evaluatePosition(board, row,col, player, boardRows, boardCols)
     board[row][col]=opponent
-    defenceScore=evaluatePosition(board,row,col,opponent,boardRows, boardCols)*0.8
-    board[row][col]=player
-    return attackScore+defenceScore
-
+    defenceScore=evaluatePosition(board,row,col,opponent,boardRows, boardCols)
+    board[row][col]=0
+    if defenceScore>=10000:
+        return float('inf')
+    return attackScore+defenceScore*20
+    
 def getRelevantMoves(board, boardRows, boardCols):
     relevantMoves = set()
     directions = [
@@ -136,6 +151,10 @@ def minimax(board, boardRows, boardCols, depth, isMaximizing, alpha, beta):
     scoredMoves=[]
     for row, col in possibleMoves:
         board[row][col] = 2 if isMaximizing else 1
+        if board[row][col]==1 and evaluatePosition(board,boardRows,boardCols,1,row,col)>=10000:
+            board[row][col] = 0
+            return True
+        # board[row][col] = 1
         score = quickEvaluate(board, row, col, len(board),len(board[0]))
         board[row][col] = 0
         scoredMoves.append((score,row,col))

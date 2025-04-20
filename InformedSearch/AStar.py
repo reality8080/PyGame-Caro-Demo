@@ -11,9 +11,9 @@ def evaluatedAStar(checkBoard,player, boardRows,boardCols):
                 score+=10
             elif checkBoard[row][col]==(3-player):
                 score-=10
-    if checkWin(player,checkBoard):
+    if checkWin(checkBoard,player,boardRows,boardCols):
         return 1000
-    elif checkWin(3-player,checkBoard):
+    elif checkWin(checkBoard,3-player,boardRows,boardCols):
         return -1000
     return score
 
@@ -25,7 +25,7 @@ def AStar(board,boardRows,boardCols,player=2):
         for col in range(boardCols):
             if board[row][col]==0:
                 board[row][col]=opponent
-                if checkWin(opponent,board):
+                if checkWin(board,opponent, boardRows,boardCols):
                     board[row][col]=0
                     markSquare(board,row,col,player)
                     return True

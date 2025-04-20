@@ -13,6 +13,8 @@ from InformedSearch.BestFirstSearch import bestMoveBFS
 from Draw import drawLines,drawFigures
 from availableSquare import availableSquare
 from MarkSquare import  markSquare
+from InformedSearch.AStar import AStar
+# from InformedSearch.miniMaxConSult_Le import bestMoveMiniMax as bestMoveMiniMaxLe
 
 pygame.init()
 
@@ -29,8 +31,8 @@ HEIGHT = 600
 # Duong ke
 LINEWIDTH = 5
 FPS = 60
-boardRows =5
-boardCols = 5
+boardRows =6
+boardCols = 6
 # Kich thuoc o
 squareSize= WIDTH//boardCols
 circleRadius = squareSize//3
@@ -56,9 +58,8 @@ crossWidth = 25
 # Them he so danh gia
 
 # khởi tạo game
-
-async def callMiniMax(board,boardRows,boardCols):
-    return await bestMoveMiniMax(board,boardRows,boardCols)
+# async def callMiniMax(board,boardRows,boardCols):
+#     return await bestMoveMiniMaxLe(board,boardRows,boardCols)
 
 def restartGame(screen,board):
     screen.fill(Black)
@@ -97,29 +98,29 @@ def start(algorithm):
                         gameOver=True
                     elif isBoardFull(board, boardRows, boardCols):
                         gameOver=True
-                    player=player%2+1
+                    # player=player%2-1
+                    else:
+                        player = 2
                 # AI đánh
-                    if not gameOver:
-                        if(algorithm == "Astar"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                        if(algorithm == "BestFirstSearch"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                        if(algorithm == "MiniMax"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                   
+                        if not gameOver:
+                            if(algorithm == "Astar"):
+                                AStar(board,boardRows,boardCols)
+                            elif(algorithm == "BestFirstSearch"):
+                                bestMoveBFS(board,boardRows,boardCols)
+                            elif(algorithm == "MiniMax"):
+                                bestMoveMiniMax(board,boardRows,boardCols)
+                                
+                            if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
+                                gameOver=True
+                            elif isBoardFull(board, boardRows, boardCols):
+                                gameOver=True
+                            else:
+                                player = 1
                     if not gameOver:
                         if isBoardFull(board,boardRows, boardCols):
                             gameOver=True
-                        player=player%2+1
+                        # player=player%2-1
+                        player = 1
             if event.type==pygame.KEYDOWN:   
                 if event.key==pygame.K_r:
                     restartGame(screen,board)
@@ -147,5 +148,3 @@ def start(algorithm):
                 drawLines(screen,squareSize,boardRows,Blue,WIDTH,HEIGHT,LINEWIDTH)   
         pygame.display.update()
         pygame.time.Clock().tick(FPS)
-if __name__ == "__main__":
-    start()
