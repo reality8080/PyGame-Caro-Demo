@@ -115,7 +115,6 @@ def start(algorithm):
                                 if checkWin(board,player=2):
                                  gameOver=True
                                 player=player%2+1
-                   
                     if not gameOver:
                         if isBoardFull(board,boardRows, boardCols):
                             gameOver=True

@@ -73,13 +73,15 @@ def settings():
         pygame.time.Clock().tick(60)
 
 
-buttonWidth=Width//2-100
-buttonHeight=Height//2
+buttonWidth=250
+buttonHeight=50
 space=70
+center_X=(Width - buttonWidth) // 2
+Start_y= Height//2-(buttonHeight+space)
 
-buttonAStar=pygame.Rect(buttonWidth,buttonHeight,250,50)
-buttonBFS=pygame.Rect(buttonWidth,buttonHeight+space,250,50)
-buttonMiniMax=pygame.Rect(buttonWidth,buttonHeight+space*2,250,50)
-buttonDHClimbing=pygame.Rect(buttonWidth,buttonHeight+space*3,250,50)
+buttonAStar=pygame.Rect(center_X,Start_y,buttonWidth,buttonHeight)
+buttonBFS=pygame.Rect(center_X,Start_y+space,buttonWidth,buttonHeight)
+buttonMiniMax=pygame.Rect(center_X,Start_y+space*2,buttonWidth,buttonHeight)
+buttonDHClimbing=pygame.Rect(center_X,Start_y+space*3,buttonWidth,buttonHeight)
 
 selectedAlgorithm = "MiniMax"

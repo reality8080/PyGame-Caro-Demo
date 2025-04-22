@@ -17,8 +17,8 @@ def heuristic(board, player, rows, cols):
 
     return score
 
-def DeepHillClimbing(board, boardRows,boardCols, player=2):
-    best_score = heuristic(board, player, r, c)
+def DeepHillClimbing(board, boardRows, boardCols, player=2):
+    best_score = heuristic(board, player, boardRows, boardCols)
     best_move = None
 
     for r in range(boardRows):
@@ -29,11 +29,9 @@ def DeepHillClimbing(board, boardRows,boardCols, player=2):
                 if score > best_score:
                     best_score = score
                     best_move = (r, c)
-                    board[r][c] = 0
-                if best_move:
-                    best_score= score
-                    best_move = (r, c)
-    if best_move:
+                board[r][c] = 0  
+
+    if best_move is not None:
         r, c = best_move
         markSquare(board, r, c, player)
         return True
