@@ -7,13 +7,14 @@ import asyncio
 
 # from InformedSearch.AStar import AStar
 from checkWin import checkWin
-from InformedSearch.miniMax import bestMoveMiniMax
+from InformedSearch.miniMax import bestMoves
 from isFullBoard import isBoardFull
 from InformedSearch.BestFirstSearch import bestMoveBFS
 from Draw import drawLines,drawFigures
 from availableSquare import availableSquare
 from MarkSquare import  markSquare
 from InformedSearch.AStar import AStar
+from InformedSearch.DeepHillClimbing import DeepHillClimbing
 # from InformedSearch.miniMaxConSult_Le import bestMoveMiniMax as bestMoveMiniMaxLe
 
 pygame.init()
@@ -96,31 +97,45 @@ def start(algorithm):
                     markSquare(board,mouseY,mouseX, player)
                     if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
                         gameOver=True
-                    elif isBoardFull(board, boardRows, boardCols):
-                        gameOver=True
-                    # player=player%2-1
+                    # elif isBoardFull(board, boardRows, boardCols):
+                        # gameOver=True
                     else:
                         player = 2
                 # AI đánh
-                        if not gameOver:
-                            if(algorithm == "Astar"):
-                                AStar(board,boardRows,boardCols)
-                            elif(algorithm == "BestFirstSearch"):
-                                bestMoveBFS(board,boardRows,boardCols)
-                            elif(algorithm == "MiniMax"):
-                                bestMoveMiniMax(board,boardRows,boardCols)
-                                
-                            if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
-                                gameOver=True
-                            elif isBoardFull(board, boardRows, boardCols):
-                                gameOver=True
-                            else:
-                                player = 1
+                    if not gameOver:
+                        if(algorithm == "Astar"):
+                            if(AStar(board,boardRows,boardCols)):
+                                if checkWin(board,2,boardRows,boardCols):
+                                    gameOver=True
+                            player=1
+                        elif(algorithm == "BestFirstSearch"):
+                            if(bestMoveBFS(board,boardRows,boardCols)):
+                                if checkWin(board,2,boardRows,boardCols):
+                                    gameOver=True   
+                            player=1                             
+                        elif(algorithm == "MiniMax"):
+                            if(bestMoves(board,boardRows,boardCols)):
+                                if checkWin(board,2,boardRows,boardCols):
+                                    gameOver=True       
+                            player=1
+                         
+                        elif(algorithm == "DHClimbing"):
+                            if(DeepHillClimbing(board,boardRows,boardCols)):
+                                if checkWin(board,2,boardRows,boardCols):
+                                    gameOver=True                                
+                            player=1
+                            
+                        # if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
+                        #     gameOver=True
+                        # elif isBoardFull(board, boardRows, boardCols):
+                        #     gameOver=True
+                        # else:
+                        #     player = 1
                     if not gameOver:
                         if isBoardFull(board,boardRows, boardCols):
                             gameOver=True
                         # player=player%2-1
-                        player = 1
+                        # player = 1
             if event.type==pygame.KEYDOWN:   
                 if event.key==pygame.K_r:
                     restartGame(screen,board)
@@ -129,8 +144,8 @@ def start(algorithm):
                 if event.key==pygame.K_s:
                     from settings import settings
                     algo = settings()
-                    if algo and algo != "Back":
-                        start(algo)
+          
+                    start(algo)
                 if event.key==pygame.K_q:
                     pygame.quit()
                     sys.exit()    
