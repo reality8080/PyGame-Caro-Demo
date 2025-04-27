@@ -2,41 +2,41 @@ import sys
 import numpy as np
 import pygame
 from collections import deque
-
 import asyncio
 
-# from InformedSearch.AStar import AStar
 from checkWin import checkWin
 from InformedSearch.miniMax import bestMoves
-from isFullBoard import isBoardFull
 from InformedSearch.BestFirstSearch import bestMoveBFS
-from Draw import drawLines,drawFigures
+from InformedSearch.AStar import AStar
+from UnInformedSearch.UCS import ucs
+
+from isFullBoard import isBoardFull
+from Draw import drawLines, drawFigures
 from availableSquare import availableSquare
-from MarkSquare import  markSquare
+from MarkSquare import markSquare
 from InformedSearch.AStar import AStar
 from InformedSearch.DeepHillClimbing import DeepHillClimbing
 # from InformedSearch.miniMaxConSult_Le import bestMoveMiniMax as bestMoveMiniMaxLe
 
 pygame.init()
 
-# Mau sac
+# Màu sắc
 White = (255, 255, 255)
 Black = (0, 0, 0)
 Red = (255, 0, 0)
-Gray= (128, 128, 128)
+Gray = (128, 128, 128)
 Blue = (0, 0, 255)
 Green = (0, 255, 0)
-# Kich thuoc
+
+# Kích thước
 WIDTH = 600
 HEIGHT = 600
-# Duong ke
 LINEWIDTH = 5
 FPS = 60
-boardRows =6
+boardRows = 6
 boardCols = 6
-# Kich thuoc o
-squareSize= WIDTH//boardCols
-circleRadius = squareSize//3
+squareSize = WIDTH // boardCols
+circleRadius = squareSize // 3
 circleWidth = 15
 crossWidth = 25
 
@@ -64,24 +64,20 @@ crossWidth = 25
 
 def restartGame(screen,board):
     screen.fill(Black)
-    drawLines(screen,squareSize,boardRows,White,WIDTH,HEIGHT,LINEWIDTH)
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     for row in range(boardRows):
         for col in range(boardCols):
-            board[row][col]=0
+            board[row][col] = 0
 
+def start(algorithm="MiniMax"):
+    player = 1
+    gameOver = False
 
-def start(algorithm):
-    player=1
-    gameOver=False
-
-    # Tao man hinh va chu
-    screen=pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Co Caro")
-    # To mau nen
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Cờ Caro")
     screen.fill(Black)
-    # Tao bang kich thuoc 3*3
-    board=np.zeros((boardRows, boardCols))
-    drawLines(screen,squareSize,boardRows,White,WIDTH,HEIGHT,LINEWIDTH)
+    board = np.zeros((boardRows, boardCols))
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
 
     while True:
         for event in pygame.event.get():
@@ -124,6 +120,13 @@ def start(algorithm):
                                 if checkWin(board,2,boardRows,boardCols):
                                     gameOver=True                                
                             player=1
+                        elif algorithm == "UCS":
+                            move = ucs(board, 2, boardRows, boardCols)
+                            if move:
+                                markSquare(board, move[0], move[1], 2)
+                                if checkWin(board,2,boardRows,boardCols):
+                                    gameOver=True
+                            player=1
                             
                         # if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
                         #     gameOver=True
@@ -148,18 +151,20 @@ def start(algorithm):
                     start(algo)
                 if event.key==pygame.K_q:
                     pygame.quit()
-                    sys.exit()    
+                    sys.exit()
+
         if not gameOver:
-            drawFigures(screen,board,boardRows,squareSize,boardCols,White,crossWidth,circleRadius,circleWidth)
+            drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)
         else:
-            if checkWin(board,1,boardRows,boardCols):
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Green,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Green,WIDTH,HEIGHT,LINEWIDTH)
-            elif checkWin(board,2,boardRows,boardCols):
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Red,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Red,WIDTH,HEIGHT,LINEWIDTH)    
+            if checkWin(board, 1, boardRows, boardCols):
+                drawFigures(screen, board, boardRows, squareSize, boardCols, Green, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows, Green, WIDTH, HEIGHT, LINEWIDTH)
+            elif checkWin(board, 2, boardRows, boardCols):
+                drawFigures(screen, board, boardRows, squareSize, boardCols, Red, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows, Red, WIDTH, HEIGHT, LINEWIDTH)
             else:
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Blue,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Blue,WIDTH,HEIGHT,LINEWIDTH)   
+                drawFigures(screen, board, boardRows, squareSize, boardCols, Blue, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows, Blue, WIDTH, HEIGHT, LINEWIDTH)
+
         pygame.display.update()
         pygame.time.Clock().tick(FPS)
