@@ -8,6 +8,7 @@ from checkWin import checkWin
 from InformedSearch.miniMax import bestMoveMiniMax
 from InformedSearch.BestFirstSearch import bestMoveBFS
 from InformedSearch.AStar import AStar
+from UnInformedSearch.and_or import bestMoveAndOr
 from UnInformedSearch.UCS import ucs
 
 from isFullBoard import isBoardFull
@@ -44,6 +45,21 @@ def restartGame(screen, board):
         for col in range(boardCols):
             board[row][col] = 0
 
+def replay(screen, history):
+    board = np.zeros((boardRows, boardCols))
+    screen.fill(Black)
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
+
+    for move in history:
+        row, col, player = move
+        markSquare(board, row, col, player)
+        drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)
+        pygame.display.update()
+        pygame.time.wait(500)  # đợi 0.5s cho mỗi bước
+
+    pygame.time.wait(2000)  # Đợi sau khi kết thúc phát lại
+
+
 def start(algorithm="MiniMax"):
     player = 1
     gameOver = False
@@ -53,6 +69,8 @@ def start(algorithm="MiniMax"):
     screen.fill(Black)
     board = np.zeros((boardRows, boardCols))
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
+
+    move_history = []  # Lưu các bước đi
 
     while True:
         for event in pygame.event.get():
@@ -65,31 +83,31 @@ def start(algorithm="MiniMax"):
                 mouseY = event.pos[1] // squareSize
                 if availableSquare(board, mouseY, mouseX):
                     markSquare(board, mouseY, mouseX, player)
+                    move_history.append((mouseY, mouseX, player))
+
                     if checkWin(board, player, boardRows, boardCols):
                         gameOver = True
                     elif isBoardFull(board, boardRows, boardCols):
                         gameOver = True
                     player = player % 2 + 1
 
-                    # AI đánh
                     if not gameOver:
                         if algorithm == "MiniMax":
                             move = bestMoveMiniMax(board, boardRows, boardCols)
-                            if move:
-                                markSquare(board, move[0], move[1], 2)
                         elif algorithm == "BestFirstSearch":
                             move = bestMoveBFS(board, boardRows, boardCols)
-                            if move:
-                                markSquare(board, move[0], move[1], 2)
                         elif algorithm == "Astar":
                             move = AStar(board, boardRows, boardCols)
-                            if move:
-                                markSquare(board, move[0], move[1], 2)
                         elif algorithm == "UCS":
                             move = ucs(board, 2, boardRows, boardCols)
-                            if move:
-                                markSquare(board, move[0], move[1], 2)
-
+                        elif algorithm == "AndOr":
+                            move = bestMoveAndOr(board, 2, boardRows, boardCols)
+                        else:
+                            move = None
+                        if move:
+                            markSquare(board, move[0], move[1], 2)
+                            move_history.append((move[0], move[1], 2))
+                        
                         if checkWin(board, 2, boardRows, boardCols):
                             gameOver = True
                         elif isBoardFull(board, boardRows, boardCols):
@@ -100,16 +118,19 @@ def start(algorithm="MiniMax"):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     restartGame(screen, board)
+                    move_history.clear()
                     gameOver = False
                     player = 1
-                if event.key == pygame.K_s:
+                elif event.key == pygame.K_s:
                     from settings import settings
                     algo = settings()
                     if algo and algo != "Back":
                         start(algo)
-                if event.key == pygame.K_q:
+                elif event.key == pygame.K_q:
                     pygame.quit()
                     sys.exit()
+                elif event.key == pygame.K_p:
+                    replay(screen, move_history)
 
         if not gameOver:
             drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)

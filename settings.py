@@ -4,6 +4,7 @@ from InformedSearch.AStar import AStar
 from InformedSearch.BestFirstSearch import bestMoveBFS
 from InformedSearch.miniMax import bestMoveMiniMax
 from UnInformedSearch.UCS import ucs
+from UnInformedSearch.and_or import bestMoveAndOr
 
 pygame.init()
 
@@ -52,7 +53,8 @@ def settings():
         drawButton(buttonAStar, "A*", buttonAStar.collidepoint(mouseX, mouseY))
         drawButton(buttonBFS, "BFS", buttonBFS.collidepoint(mouseX, mouseY))
         drawButton(buttonMiniMax, "MiniMax", buttonMiniMax.collidepoint(mouseX, mouseY))
-        drawButton(buttonUCS, "UCS", buttonUCS.collidepoint(mouseX, mouseY))  # ✅ Vẽ nút UCS
+        drawButton(buttonUCS, "UCS", buttonUCS.collidepoint(mouseX, mouseY))
+        drawButton(buttonAndOr, "And-Or", buttonAndOr.collidepoint(mouseX, mouseY)) 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -68,21 +70,25 @@ def settings():
                 elif buttonMiniMax.collidepoint(mouseX, mouseY):
                     selectedAlgorithm = "MiniMax"
                     return "MiniMax"
-                elif buttonUCS.collidepoint(mouseX, mouseY):  # ✅ Bắt sự kiện UCS
+                elif buttonUCS.collidepoint(mouseX, mouseY):
                     selectedAlgorithm = "UCS"
                     return "UCS"
+                elif buttonAndOr.collidepoint(mouseX, mouseY): 
+                    selectedAlgorithm = "AndOr"
+                    return "AndOr"
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 
 # Tọa độ các nút
 buttonWidth = Width // 2 - 100
-buttonHeight = Height // 2
+buttonHeight = Height // 44
 space = 70
 
 buttonAStar = pygame.Rect(buttonWidth, buttonHeight, 200, 50)
 buttonBFS = pygame.Rect(buttonWidth, buttonHeight + space, 200, 50)
 buttonMiniMax = pygame.Rect(buttonWidth, buttonHeight + space * 2, 200, 50)
-buttonUCS = pygame.Rect(buttonWidth, buttonHeight + space * 3, 200, 50)  # ✅ Nút UCS
+buttonUCS = pygame.Rect(buttonWidth, buttonHeight + space * 3, 200, 50)
+buttonAndOr = pygame.Rect(buttonWidth, buttonHeight + space * 4, 200, 50)
 
 selectedAlgorithm = "MiniMax"

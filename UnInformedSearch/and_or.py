@@ -1,6 +1,5 @@
 from checkWin import checkWin
 from MarkSquare import markSquare
-import numpy as np
 
 def evaluateBoard(board, boardRows, boardCols):
     def get_line_score(line, player):
@@ -39,19 +38,10 @@ def evaluateBoard(board, boardRows, boardCols):
                     score += get_line_score(line, 2)  # 2 là AI
     return score
 
+def bestMoveAndOr(board, player, boardRows, boardCols):
+    def opponent(p):
+        return 1 if p == 2 else 2
 
-
-def heuristic(board, row, col, player, boardRows, boardCols):
-    board[row][col] = player
-    if checkWin(board, player, boardRows, boardCols):
-        score = 1000
-    else:
-        score = evaluateBoard(board, boardRows, boardCols)
-    board[row][col] = 0
-    return score
-
-
-def ucs(board, player, boardRows, boardCols):
     bestMove = None
     bestScore = -float('inf')
 
@@ -59,7 +49,24 @@ def ucs(board, player, boardRows, boardCols):
         for col in range(boardCols):
             if board[row][col] == 0:
                 board[row][col] = player
-                score = evaluateBoard(board, boardRows, boardCols)
+
+                if checkWin(board, player, boardRows, boardCols):
+                    score = 1000
+                else:
+                    # "Or" node – nếu đối phương phản ứng tệ, ta được lợi
+                    worstResponseScore = float('inf')
+                    for r2 in range(boardRows):
+                        for c2 in range(boardCols):
+                            if board[r2][c2] == 0:
+                                board[r2][c2] = opponent(player)
+                                if checkWin(board, opponent(player), boardRows, boardCols):
+                                    responseScore = -1000
+                                else:
+                                    responseScore = evaluateBoard(board, boardRows, boardCols)
+                                worstResponseScore = min(worstResponseScore, responseScore)
+                                board[r2][c2] = 0
+
+                    score = worstResponseScore
                 board[row][col] = 0
 
                 if score > bestScore:
@@ -67,7 +74,3 @@ def ucs(board, player, boardRows, boardCols):
                     bestMove = (row, col)
 
     return bestMove
-
-
-
-
