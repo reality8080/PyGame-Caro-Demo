@@ -8,9 +8,11 @@ from checkWin import checkWin
 from InformedSearch.miniMax import bestMoveMiniMax
 from isFullBoard import isBoardFull
 from InformedSearch.BestFirstSearch import bestMoveBFS
-from Draw import drawLines,drawFigures
+from Draw import drawLines, drawFigures
 from availableSquare import availableSquare
-from MarkSquare import  markSquare
+from MarkSquare import markSquare
+from InformedSearch.Backtracking import bestMoveBacktracking
+from game_logger import GameLogger
 
 pygame.init()
 
@@ -18,7 +20,7 @@ pygame.init()
 White = (255, 255, 255)
 Black = (0, 0, 0)
 Red = (255, 0, 0)
-Gray= (128, 128, 128)
+Gray = (128, 128, 128)
 Blue = (0, 0, 255)
 Green = (0, 255, 0)
 # Kich thuoc
@@ -30,7 +32,7 @@ FPS = 60
 boardRows = 4
 boardCols = 4
 # Kich thuoc o
-squareSize= WIDTH//boardCols
+squareSize = WIDTH//boardCols
 circleRadius = squareSize//3
 circleWidth = 15
 crossWidth = 25
@@ -56,93 +58,148 @@ crossWidth = 25
 # khởi tạo game
 
 
-
-def restartGame(screen,board):
+def restartGame(screen, board):
     screen.fill(Black)
-    drawLines(screen,squareSize,boardRows,White,WIDTH,HEIGHT,LINEWIDTH)
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     for row in range(boardRows):
         for col in range(boardCols):
-            board[row][col]=0
+            board[row][col] = 0
 
 
 def start(algorithm):
-    player=1
-    gameOver=False
-
+    player = 1
+    gameOver = False
+    game_logger = GameLogger()
     # Tao man hinh va chu
-    screen=pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Co Caro")
     # To mau nen
     screen.fill(Black)
     # Tao bang kich thuoc 3*3
-    board=np.zeros((boardRows, boardCols))
-    drawLines(screen,squareSize,boardRows,White,WIDTH,HEIGHT,LINEWIDTH)
+    board = np.zeros((boardRows, boardCols))
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                game_logger.save_log()
                 pygame.quit()
                 sys.exit()
-            
-            if event.type==pygame.MOUSEBUTTONDOWN and not gameOver:
-                mouseX=event.pos[0]// squareSize
-                mouseY=event.pos[1]//squareSize
+            if event.type == pygame.MOUSEBUTTONDOWN and not gameOver:
+                mouseX = event.pos[0] // squareSize
+                mouseY = event.pos[1]//squareSize
                 # Người chơi
-                if availableSquare(board,mouseY,mouseX):
-                    markSquare(board,mouseY,mouseX, player)
-                    if checkWin(checkBoard=board,player=player):
-                        gameOver=True
-                    player=player%2+1
+                if availableSquare(board, mouseY, mouseX):
+                    game_logger.add_step(board, (mouseY, mouseX), player)
+                    markSquare(board, mouseY, mouseX, player)
+                    if checkWin(checkBoard=board, player=player):
+                        gameOver = True
+                        game_logger.save_log()
+                    else:
+                        player = 2
                 # AI đánh
                     if not gameOver:
-                        if(algorithm == "Astar"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                        if(algorithm == "BestFirstSearch"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                        if(algorithm == "MiniMax"):
-                            if bestMoveBFS(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
-                        if(algorithm == "DHClimbing"):
-                            if bestMoveMiniMax(board,boardRows,boardCols):
-                                if checkWin(board,player=2):
-                                 gameOver=True
-                                player=player%2+1
+                        if (algorithm == "Astar"):
+                            move = bestMoveBFS(board, boardRows, boardCols)
+                            if isinstance(move, tuple) and len(move) == 2:
+                                y, x = move
+                                markSquare(board, y, x, player)
+                                game_logger.add_step(board, (y, x), player=1)
+                                if checkWin(board, player=2):
+                                    gameOver = True
+                                    game_logger.save_log()
+                                else:
+                                    player = player % 2+1
+                            else:
+                                player = player % 2+1
+                        if (algorithm == "BestFirstSearch"):
+                            move = bestMoveBFS(board, boardRows, boardCols)
+                            if isinstance(move, tuple) and len(move) == 2:
+                                y, x = move
+                                markSquare(board, y, x, player)
+                                game_logger.add_step(board, (y, x), player=1)
+                                if checkWin(board, player=2):
+                                    gameOver = True
+                                    game_logger.save_log()
+                                else:
+                                    player = player % 2+1
+                            else:
+                                player = player % 2+1
+                        if (algorithm == "MiniMax"):
+                            move = bestMoveMiniMax(board, boardRows, boardCols)
+                            if isinstance(move, tuple) and len(move) == 2:
+                                y, x = move
+                                markSquare(board, y, x, player)
+                                game_logger.add_step(board, (y, x), player=1)
+                                if checkWin(board, player=2):
+                                    gameOver = True
+                                    game_logger.save_log()
+                                else:
+                                    player = player % 2+1
+                            else:
+                                player = player % 2+1
+                        if (algorithm == "DHClimbing"):
+                            move = bestMoveBFS(board, boardRows, boardCols)
+                            if isinstance(move, tuple) and len(move) == 2:
+                                y, x = move
+                                markSquare(board, y, x, player)
+                                game_logger.add_step(board, (y, x), player=1)
+                                if checkWin(board, player=2):
+                                    gameOver = True
+                                    game_logger.save_log()
+                                else:
+                                    player = player % 2+1
+                            else:
+                                player = player % 2+1
+                        if (algorithm == "Backtracking"):
+                            move = bestMoveBFS(board, boardRows, boardCols)
+                            if isinstance(move, tuple) and len(move) == 2:
+                                y, x = move
+                                markSquare(board, y, x, player)
+                                game_logger.add_step(board, (y, x), player=1)
+                                if checkWin(board, player=2):
+                                    gameOver = True
+                                    game_logger.save_log()
+                                else:
+                                    player = player % 2+1
+                            else:
+                                player = player % 2+1
                     if not gameOver:
-                        if isBoardFull(board,boardRows, boardCols):
-                            gameOver=True
-            if event.type==pygame.KEYDOWN:   
-                if event.key==pygame.K_r:
-                    restartGame(screen,board)
-                    gameOver=False           
-                    player=1  
-                if event.key==pygame.K_s:
+                        if isBoardFull(board, boardRows, boardCols):
+                            gameOver = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    restartGame(screen, board)
+                    game_logger.save_log()
+                    gameOver = False
+                    player = 1
+                if event.key == pygame.K_s:
+                    game_logger.save_log()
                     from settings import settings
                     algo = settings()
-          
                     start(algo)
-                if event.key==pygame.K_q:
+                if event.key == pygame.K_q:
                     pygame.quit()
-                    sys.exit()    
+                    sys.exit()
         if not gameOver:
-            drawFigures(screen,board,boardRows,squareSize,boardCols,White,crossWidth,circleRadius,circleWidth)
+            drawFigures(screen, board, boardRows, squareSize,
+                        boardCols, White, crossWidth, circleRadius, circleWidth)
         else:
-            if checkWin(board,1):
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Green,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Green,WIDTH,HEIGHT,LINEWIDTH)
-            elif checkWin(board,2):
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Red,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Red,WIDTH,HEIGHT,LINEWIDTH)    
+            if checkWin(board, 1):
+                drawFigures(screen, board, boardRows, squareSize,
+                            boardCols, Green, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows,
+                          Green, WIDTH, HEIGHT, LINEWIDTH)
+            elif checkWin(board, 2):
+                drawFigures(screen, board, boardRows, squareSize,
+                            boardCols, Red, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows,
+                          Red, WIDTH, HEIGHT, LINEWIDTH)
             else:
-                drawFigures(screen,board,boardRows,squareSize,boardCols,Blue,crossWidth,circleRadius,circleWidth)
-                drawLines(screen,squareSize,boardRows,Blue,WIDTH,HEIGHT,LINEWIDTH)   
+                drawFigures(screen, board, boardRows, squareSize,
+                            boardCols, Blue, crossWidth, circleRadius, circleWidth)
+                drawLines(screen, squareSize, boardRows,
+                          Blue, WIDTH, HEIGHT, LINEWIDTH)
         pygame.display.update()
         pygame.time.Clock().tick(FPS)
 

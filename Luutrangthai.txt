@@ -1,0 +1,24 @@
+Bước 1: Player 1 đánh tại (2, 2)
+Tổng số trạng thái: 1
+
+Bước 2: Player 1 đánh tại (1, 3)
+Tổng số trạng thái: 2
+
+Bước 3: Player 1 đánh tại (0, 3)
+Tổng số trạng thái: 3
+
+Bước 4: Player 1 đánh tại (1, 2)
+Tổng số trạng thái: 4
+
+Bước 5: Player 1 đánh tại (2, 1)
+Tổng số trạng thái: 5
+
+Bước 6: Player 1 đánh tại (2, 0)
+Tổng số trạng thái: 6
+
+Bước 7: Player 1 đánh tại (3, 1)
+Tổng số trạng thái: 7
+
+Bước 8: Player 1 đánh tại (3, 3)
+Tổng số trạng thái: 8
+
