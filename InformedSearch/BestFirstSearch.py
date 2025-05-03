@@ -1,20 +1,60 @@
 from checkWin import checkWin
 from MarkSquare import markSquare
 from collections import deque
+from Score.CaroEvaluator.CaroEvaluator20x20 import CaroEvaluator20x20
 
-def evaluateBoard(checkBoard,boardRows,boardCols):
-    score = 0
-    for row in range(boardRows):
-        for col in range(boardCols):
-            if checkBoard[row][col] == 2:  # AI
-                score += 10
-            elif checkBoard[row][col] == 1:  # Người chơi
-                score -= 10
-    if checkWin( checkBoard,2,boardRows,boardCols):
-        return 1000
-    elif checkWin( checkBoard,1,boardRows,boardCols):
-        return -1000
-    return score
+class EvaluatedBFS:
+    def __init__(self, board, boardRows, boardCols):
+        self.board = board
+        self.boardRows = boardRows
+        self.boardCols = boardCols
+        # self.sequenceFinder = SequenceFinder(board, boardRows, boardCols)
+        self.evaluator = CaroEvaluator20x20()
+    # def evaluate(self,player):
+    #     opponent = 3 - player
+    #     playerSequences = self.sequenceFinder.find_sequences(5, player)+\
+    #         self.sequenceFinder.find_sequences(4, player)+\
+    #         self.sequenceFinder.find_sequences(3, player)+\
+    #         self.sequenceFinder.find_sequences(2, player)
+        
+    #     opponentSequences = self.sequenceFinder.find_sequences(5, opponent)+\
+    #         self.sequenceFinder.find_sequences(4, player)+\
+    #         self.sequenceFinder.find_sequences(3, player)+\
+    #         self.sequenceFinder.find_sequences(2, player)
+
+    #     score=0
+        
+    #     score+= self.calculateScore(playerSequences,True)-self.calculateScore(opponentSequences,False)
+    #     return score
+    
+    def evaluate(self, player):
+        return self.evaluator.evaluate(self.board, player, self.boardRows, self.boardCols)
+    
+    # def calculateScore(self, sequences, isPlayer):
+        
+    #     total = 0
+    #     for seq in sequences:
+    #         if seq.length == 5:
+    #             total += 100000
+    #         elif seq.length == 4:
+    #             if seq.blockedEnds == 0:
+    #                 total += 10000
+    #             elif seq.blockedEnds == 1:
+    #                 total += 5000
+    #         elif seq.length == 3:
+    #             if seq.blockedEnds == 0:
+    #                 total += 1000
+    #             elif seq.blockedEnds == 1:
+    #                 total += 500
+    #         elif seq.length == 2:
+    #             if seq.blockedEnds == 0:
+    #                 total += 200
+    #             elif seq.blockedEnds == 1:
+    #                 total += 100
+    #     return total
+def evaluateBoard(checkBoard,player, boardRows,boardCols):
+    myEvaluator = EvaluatedBFS(checkBoard, boardRows, boardCols)
+    return myEvaluator.evaluate(player)
 
 def bestMoveBFS(board,boardRows,boardCols):
     queue=deque()
@@ -38,7 +78,7 @@ def bestMoveBFS(board,boardRows,boardCols):
     for move in validMoves:
         row,col=move
         board[row][col]=2
-        score=evaluateBoard(board,boardRows,boardCols)
+        score=evaluateBoard(board,2,boardRows,boardCols)
         if score>maxScore:
             maxScore=score
             bestMove=move
