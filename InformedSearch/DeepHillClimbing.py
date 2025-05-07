@@ -34,8 +34,8 @@ def DeepHillClimbing(board, boardRows,boardCols, player=2):
                     best_score= score
                     best_move = (r, c)
     if best_move:
-        r, c = best_move
-        markSquare(board, r, c, player)
-        return True
+        # r, c = best_move
+        # markSquare(board, r, c, player)
+        return best_move
     else:
-        return False
+        return None

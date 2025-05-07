@@ -5,18 +5,18 @@ from collections import deque
 import asyncio
 
 from checkWin import checkWin
-from InformedSearch.miniMax import bestMoves
-from InformedSearch.BestFirstSearch import bestMoveBFS
+from InformedSearch.miniMax import bestMove
 from InformedSearch.AStar import AStar
+from UnInformedSearch.and_or import bestMoveAndOr
 from UnInformedSearch.UCS import ucs
-
 from isFullBoard import isBoardFull
 from Draw import drawLines, drawFigures
 from availableSquare import availableSquare
 from MarkSquare import markSquare
-from InformedSearch.AStar import AStar
 from InformedSearch.DeepHillClimbing import DeepHillClimbing
-# from InformedSearch.miniMaxConSult_Le import bestMoveMiniMax as bestMoveMiniMaxLe
+from QLearning.trainQLearning import trainQLearning
+from QLearning.ChooseAction import chooseAction
+from QLearning.getState import getState
 
 pygame.init()
 
@@ -33,8 +33,8 @@ WIDTH = 600
 HEIGHT = 600
 LINEWIDTH = 5
 FPS = 60
-boardRows = 5
-boardCols = 5
+boardRows = 3
+boardCols = 3
 squareSize = WIDTH // boardCols
 circleRadius = squareSize // 3
 circleWidth = 15
@@ -61,110 +61,140 @@ crossWidth = 25
 # khởi tạo game
 # async def callMiniMax(board,boardRows,boardCols):
 #     return await bestMoveMiniMaxLe(board,boardRows,boardCols)
+qTable,_=trainQLearning(boardRows,boardCols,episodes=10000,searchAlgorithm="MiniMax")
 
-def restartGame(screen,board):
+
+def checkGameOver(board, player, boardRows, boardCols):
+    if checkWin(board, player, boardRows, boardCols):
+        return True, player
+    if isBoardFull(board, boardRows, boardCols):
+        return True, 0
+    return False, None
+
+def handlePlayerMove(board, row, col, player, move_history):
+    if availableSquare(board, row, col):
+        markSquare(board, row, col, player)
+        move_history.append((row, col, player))
+        return True
+    return False
+
+def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history):
+    move = None
+    if algorithm == "Astar":
+        move = AStar(board, boardRows, boardCols)
+    elif algorithm == "MiniMax":
+        move = bestMove(board, boardRows, boardCols)
+    elif algorithm == "DHClimbing":
+        move = DeepHillClimbing(board, boardRows, boardCols)
+    elif algorithm == "UCS":
+        move = ucs(board, 2, boardRows, boardCols)
+    elif algorithm == "AndOr":
+        move = bestMoveAndOr(board, 2, boardRows, boardCols)
+    # elif algorithm == "QLearning":
+    #     state = getState(board)
+    #     move = chooseAction(board, boardRows, boardCols, state, 0, qTable)  # epsilon=0 để khai thác
+        
+    elif algorithm == "QLearning":
+            # state = getState(board)
+        state = tuple(board.flatten())  # Chuyển board thành tuple
+        if state not in qTable:
+            qTable[state] = np.zeros(boardRows * boardCols)
+        move = chooseAction(board, boardRows, boardCols, state, 0, qTable)
+        
+    if move and availableSquare(board, move[0], move[1]):
+        markSquare(board, move[0], move[1], 2)
+        move_history.append((move[0], move[1], 2))
+        return True
+    return False
+
+# def drawStatus(screen, player, gameOver, winner):
+#     font = pygame.font.SysFont(None, 40)
+#     if not gameOver:
+#         text = font.render(f"Player {player}'s Turn", True, White)
+#     else:
+#         if winner == 1:
+#             text = font.render("Player 1 Wins!", True, Green)
+#         elif winner == 2:
+#             text = font.render("AI Wins!", True, Red)
+#         else:
+#             text = font.render("Draw!", True, Blue)
+#     screen.blit(text, (WIDTH // 2 - 100, 10))
+    
+def drawInstructions(screen):
+    font = pygame.font.SysFont(None, 30)
+    text = font.render("R: Restart | S: Settings | Q: Quit | P: Replay", True, White)
+    screen.blit(text, (10, HEIGHT - 30))
+
+def renderGame(screen, board, boardRows, boardCols, gameOver, winner):
+    drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)
+    drawLines(screen, squareSize, boardRows, White if not gameOver else (Green if winner == 1 else Red if winner == 2 else Blue), WIDTH, HEIGHT, LINEWIDTH)
+    # drawStatus(screen, 1 if not gameOver else None, gameOver, winner)
+    drawInstructions(screen)
+    pygame.display.update()
+    
+def restartGame(screen, board):
     screen.fill(Black)
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     for row in range(boardRows):
         for col in range(boardCols):
             board[row][col] = 0
 
+def replay(screen, history):
+    board = np.zeros((boardRows, boardCols))
+    screen.fill(Black)
+    drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
+    for move in history:
+        row, col, player = move
+        markSquare(board, row, col, player)
+        renderGame(screen, board, boardRows, boardCols, False, None)
+        pygame.time.wait(500)
+    pygame.time.wait(2000)
+    
+
 def start(algorithm="MiniMax"):
     player = 1
     gameOver = False
-
+    winner = None
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Cờ Caro")
     screen.fill(Black)
     board = np.zeros((boardRows, boardCols))
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
+    move_history = []
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
-            if event.type==pygame.MOUSEBUTTONDOWN and not gameOver:
-                mouseX=event.pos[0]// squareSize
-                mouseY=event.pos[1]//squareSize
-                # Người chơi
-                if availableSquare(board,mouseY,mouseX):
-                    markSquare(board,mouseY,mouseX, player)
-                    if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
-                        gameOver=True
-                    # elif isBoardFull(board, boardRows, boardCols):
-                        # gameOver=True
-                    else:
+            if event.type == pygame.MOUSEBUTTONDOWN and not gameOver and player == 1:
+                mouseX = event.pos[0] // squareSize
+                mouseY = event.pos[1] // squareSize
+                if handlePlayerMove(board, mouseY, mouseX, player, move_history):
+                    gameOver, winner = checkGameOver(board, player, boardRows, boardCols)
+                    if not gameOver:
                         player = 2
-                # AI đánh
-                    if not gameOver:
-                        if(algorithm == "Astar"):
-                            if(AStar(board,boardRows,boardCols)):
-                                if checkWin(board,2,boardRows,boardCols):
-                                    gameOver=True
-                            player=1
-                        elif(algorithm == "BestFirstSearch"):
-                            if(bestMoveBFS(board,boardRows,boardCols)):
-                                if checkWin(board,2,boardRows,boardCols):
-                                    gameOver=True   
-                            player=1                             
-                        elif(algorithm == "MiniMax"):
-                            if(bestMoves(board,boardRows,boardCols)):
-                                if checkWin(board,2,boardRows,boardCols):
-                                    gameOver=True       
-                            player=1
-                         
-                        elif(algorithm == "DHClimbing"):
-                            if(DeepHillClimbing(board,boardRows,boardCols)):
-                                if checkWin(board,2,boardRows,boardCols):
-                                    gameOver=True                                
-                            player=1
-                        elif algorithm == "UCS":
-                            move = ucs(board, 2, boardRows, boardCols)
-                            if move:
-                                markSquare(board, move[0], move[1], 2)
-                                if checkWin(board,2,boardRows,boardCols):
-                                    gameOver=True
-                            player=1
-                            
-                        # if checkWin(checkBoard=board,player=player,boardRows=boardRows,boardCols=boardCols):
-                        #     gameOver=True
-                        # elif isBoardFull(board, boardRows, boardCols):
-                        #     gameOver=True
-                        # else:
-                        #     player = 1
-                    if not gameOver:
-                        if isBoardFull(board,boardRows, boardCols):
-                            gameOver=True
-                        # player=player%2-1
-                        # player = 1
-            if event.type==pygame.KEYDOWN:   
-                if event.key==pygame.K_r:
-                    restartGame(screen,board)
-                    gameOver=False           
-                    player=1  
-                if event.key==pygame.K_s:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    restartGame(screen, board)
+                    move_history.clear()
+                    gameOver = False
+                    player = 1
+                elif event.key == pygame.K_s:
                     from settings import settings
                     algo = settings()
-          
                     start(algo)
-                if event.key==pygame.K_q:
+                elif event.key == pygame.K_q:
                     pygame.quit()
                     sys.exit()
+                elif event.key == pygame.K_p:
+                    replay(screen, move_history)
 
-        if not gameOver:
-            drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)
-        else:
-            if checkWin(board, 1, boardRows, boardCols):
-                drawFigures(screen, board, boardRows, squareSize, boardCols, Green, crossWidth, circleRadius, circleWidth)
-                drawLines(screen, squareSize, boardRows, Green, WIDTH, HEIGHT, LINEWIDTH)
-            elif checkWin(board, 2, boardRows, boardCols):
-                drawFigures(screen, board, boardRows, squareSize, boardCols, Red, crossWidth, circleRadius, circleWidth)
-                drawLines(screen, squareSize, boardRows, Red, WIDTH, HEIGHT, LINEWIDTH)
-            else:
-                drawFigures(screen, board, boardRows, squareSize, boardCols, Blue, crossWidth, circleRadius, circleWidth)
-                drawLines(screen, squareSize, boardRows, Blue, WIDTH, HEIGHT, LINEWIDTH)
+        if not gameOver and player == 2:
+            if handleAIMove(board, algorithm, boardRows, boardCols, move_history):
+                gameOver, winner = checkGameOver(board, 2, boardRows, boardCols)
+                if not gameOver:
+                    player = 1
 
-        pygame.display.update()
+        renderGame(screen, board, boardRows, boardCols, gameOver, winner)
         pygame.time.Clock().tick(FPS)

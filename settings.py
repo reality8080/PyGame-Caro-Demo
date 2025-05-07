@@ -5,6 +5,7 @@ import sys
 # from InformedSearch.miniMax import bestMoves
 # from InformedSearch.DeepHillClimbing import DeepHillClimbing
 # from UnInformedSearch.UCS import ucs
+# from UnInformedSearch.and_or import bestMoveAndOr
 
 pygame.init()
 
@@ -44,6 +45,14 @@ def drawButton(button, text, isHover):
 def settings():
     global selectedAlgorithm
     running = True
+    screen = pygame.display.set_mode((Width, Height))
+    pygame.display.set_caption("Settings")
+
+    loadImage = pygame.image.load("./Temple/images/wallpapersden.com_stardew-valley-hd-gaming-background_2560x1700.jpg")
+    loadImage = pygame.transform.scale(loadImage, (Width, Height))
+
+    # Font chữ
+    fontRegular = pygame.font.Font("./Temple/font/PressStart2P-Regular.ttf", 20)
     while running:
         screen.blit(loadImage, (0, 0))
 
@@ -55,6 +64,10 @@ def settings():
         drawButton(buttonMiniMax, "MiniMax", buttonMiniMax.collidepoint(mouseX, mouseY))
         drawButton(buttonUCS, "UCS", buttonUCS.collidepoint(mouseX, mouseY))  
         drawButton(buttonDHClimbing, "DHClimbing",buttonDHClimbing.collidepoint(mouseX,mouseY))
+        drawButton(buttonUCS, "UCS", buttonUCS.collidepoint(mouseX, mouseY))
+        drawButton(buttonAndOr, "And-Or", buttonAndOr.collidepoint(mouseX, mouseY)) 
+        drawButton(buttonQLearning, "QLearning", buttonQLearning.collidepoint(mouseX, mouseY)) 
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,16 +86,22 @@ def settings():
                 elif buttonUCS.collidepoint(mouseX, mouseY):
                     selectedAlgorithm = "UCS"
                     return "UCS"
+                elif buttonAndOr.collidepoint(mouseX, mouseY): 
+                    selectedAlgorithm = "AndOr"
+                    return "AndOr"
                 elif buttonDHClimbing.collidepoint(mouseX,mouseY):
                     selectedAlgorithm = "DHClimbing"
                     return "DHClimbing"
+                elif buttonQLearning.collidepoint(mouseX,mouseY):
+                    selectedAlgorithm = "QLearning"
+                    return "QLearning"
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 
 # Tọa độ các nút
-buttonWidth = Width//2 - 100
-buttonHeight = Height // 2 -200
+buttonWidth = Width // 2 - 100
+buttonHeight = Height // 44
 space = 70
 weightBtn,heightBtn=220,50
 
@@ -91,5 +110,8 @@ buttonBFS = pygame.Rect(buttonWidth, buttonHeight + space, weightBtn, heightBtn)
 buttonMiniMax = pygame.Rect(buttonWidth, buttonHeight + space * 2, weightBtn,heightBtn)
 buttonDHClimbing=pygame.Rect(buttonWidth,buttonHeight+space*3,weightBtn, heightBtn)
 buttonUCS = pygame.Rect(buttonWidth, buttonHeight + space * 4, weightBtn, heightBtn)
+buttonAndOr = pygame.Rect(buttonWidth, buttonHeight + space * 5, weightBtn, heightBtn)
+buttonQLearning = pygame.Rect(buttonWidth, buttonHeight + space * 6, weightBtn, heightBtn)
+
 
 selectedAlgorithm = "MiniMax"

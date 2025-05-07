@@ -81,6 +81,7 @@ def AStar(board,boardRows,boardCols,player=2):
                 board[row][col]=0
     if pq:
         _,bestRow,bestCol=heapq.heappop(pq)
-        markSquare(board,bestRow,bestCol,player)
-        return True
-    return False
+        # markSquare(board,bestRow,bestCol,player)
+        # return True
+        return (bestRow,bestCol)
+    return None

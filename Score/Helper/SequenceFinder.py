@@ -135,41 +135,66 @@ class SequenceFinder:
     def detectThreatSequences(self, player):
         threatScore = 0
         opponent = 3 - player
-        for length in [3, 4]:
-            sequences = self.find_sequences(length, opponent)
-            for seq in sequences:
-                if seq.blockedEnds <= 1:  # Chuỗi có ít nhất một đầu mở
-                    if length == 4 and seq.blockedEnds == 0:
-                        threatScore -= 50000  # Chuỗi 4 mở cả hai đầu
-                    elif length == 4 and seq.blockedEnds == 1:
-                        threatScore -= 20000  # Chuỗi 4 mở một đầu
-                    elif length == 3 and seq.blockedEnds == 0:
-                        threatScore -= 5000   # Chuỗi 3 mở cả hai đầu
-                    elif length == 3 and seq.blockedEnds == 1:
-                        threatScore -= 1000   # Chuỗi 3 mở một đầu
+        sequences = self.find_sequences(2,opponent)
+        for seq in sequences:
+            if seq.blockedEnds <= 1:
+                threatScore -= 100
         return threatScore
+        # for length in [3, 4]:
+        #     sequences = self.find_sequences(length, opponent)
+        #     for seq in sequences:
+        #         if seq.blockedEnds <= 1:  # Chuỗi có ít nhất một đầu mở
+        #             if length == 4 and seq.blockedEnds == 0:
+        #                 threatScore -= 50000  # Chuỗi 4 mở cả hai đầu
+        #             elif length == 4 and seq.blockedEnds == 1:
+        #                 threatScore -= 20000  # Chuỗi 4 mở một đầu
+        #             elif length == 3 and seq.blockedEnds == 0:
+        #                 threatScore -= 5000   # Chuỗi 3 mở cả hai đầu
+        #             elif length == 3 and seq.blockedEnds == 1:
+        #                 threatScore -= 1000   # Chuỗi 3 mở một đầu
+        # return threatScore
+    
+    # def detectDoubleThreat(self, player):
+    #     doubleThreatScore = 0
+    #     opponent = 3 - player
+    #     for row in range(self.boardRows):
+    #         for col in range(self.boardCols):
+    #             if self.board[row][col] == 0:
+    #                 # Thử đặt quân của người chơi
+    #                 self.board[row][col] = player
+    #                 playerThreats = sum(1 for seq in self.find_sequences(3, player) if seq.blockedEnds <= 1) + \
+    #                                 sum(2 for seq in self.find_sequences(4, player) if seq.blockedEnds <= 1)
+    #                 self.board[row][col] = 0
+    #                 if playerThreats >= 2:
+    #                     doubleThreatScore += 10000
+
+    #                 # Thử đặt quân của đối thủ
+    #                 self.board[row][col] = opponent
+    #                 opponentThreats = sum(1 for seq in self.find_sequences(3, opponent) if seq.blockedEnds <= 1) + \
+    #                                 sum(2 for seq in self.find_sequences(4, opponent) if seq.blockedEnds <= 1)
+    #                 self.board[row][col] = 0
+    #                 if opponentThreats >= 2:
+    #                     doubleThreatScore -= 10000
+    #     return doubleThreatScore
+    
     def detectDoubleThreat(self, player):
         doubleThreatScore = 0
         opponent = 3 - player
         for row in range(self.boardRows):
             for col in range(self.boardCols):
                 if self.board[row][col] == 0:
-                    # Thử đặt quân của người chơi
                     self.board[row][col] = player
-                    playerThreats = sum(1 for seq in self.find_sequences(3, player) if seq.blockedEnds <= 1) + \
-                                    sum(2 for seq in self.find_sequences(4, player) if seq.blockedEnds <= 1)
+                    playerThreats = sum(1 for seq in self.find_sequences(2, player) if seq.blockedEnds <= 1)
                     self.board[row][col] = 0
                     if playerThreats >= 2:
-                        doubleThreatScore += 10000
-
-                    # Thử đặt quân của đối thủ
+                        doubleThreatScore += 500
                     self.board[row][col] = opponent
-                    opponentThreats = sum(1 for seq in self.find_sequences(3, opponent) if seq.blockedEnds <= 1) + \
-                                    sum(2 for seq in self.find_sequences(4, opponent) if seq.blockedEnds <= 1)
+                    opponentThreats = sum(1 for seq in self.find_sequences(2, opponent) if seq.blockedEnds <= 1)
                     self.board[row][col] = 0
                     if opponentThreats >= 2:
-                        doubleThreatScore -= 10000
+                        doubleThreatScore -= 500
         return doubleThreatScore
+    
     def evaluateCenterControl(self, player):
         centerScore = 0
         opponent = 3 - player
