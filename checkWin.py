@@ -1,5 +1,5 @@
 def checkWin(checkBoard, player, boardRows, boardCols):
-    winCondition = min(3, min(boardRows, boardCols))  # Đặt cố định 3 cho bàn cờ 3x3
+    winCondition = min(5, min(boardRows, boardCols))  # Đặt cố định 3 cho bàn cờ 3x3
     # Debug: In trạng thái bàn cờ
     # print(f"Checking win for player {player}:")
 
