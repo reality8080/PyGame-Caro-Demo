@@ -29,7 +29,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Q5Jn8IrLwpDKY94yBc7_-9" value="Lựa chọn&amp;nbsp;&lt;div&gt;thuật toán&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="1">
-          <mxGeometry x="-85" y="-221" width="90" height="50" as="geometry" />
+          <mxGeometry x="-86" y="-234" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Q5Jn8IrLwpDKY94yBc7_-16" value="FrontEnd" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="-73.5" y="-561.5" width="84" height="31" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
