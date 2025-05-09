@@ -131,6 +131,10 @@ def start(algorithm="MiniMax"):
                     sys.exit()
                 elif event.key == pygame.K_p:
                     replay(screen, move_history)
+                elif event.key == pygame.K_g:
+                    from replay_export import save_caro_replay_gif
+                    save_caro_replay_gif(move_history, "caro_replay.gif")
+
 
         if not gameOver:
             drawFigures(screen, board, boardRows, squareSize, boardCols, White, crossWidth, circleRadius, circleWidth)
