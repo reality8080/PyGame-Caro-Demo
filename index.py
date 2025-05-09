@@ -61,7 +61,7 @@ crossWidth = 25
 # khởi tạo game
 # async def callMiniMax(board,boardRows,boardCols):
 #     return await bestMoveMiniMaxLe(board,boardRows,boardCols)
-qTable,_=trainQLearning(boardRows,boardCols,episodes=10000,searchAlgorithm="MiniMax")
+# qTable,_=trainQLearning(boardRows,boardCols,episodes=10000,searchAlgorithm="MiniMax")
 
 
 def checkGameOver(board, player, boardRows, boardCols):
@@ -94,12 +94,12 @@ def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history
     #     state = getState(board)
     #     move = chooseAction(board, boardRows, boardCols, state, 0, qTable)  # epsilon=0 để khai thác
         
-    elif algorithm == "QLearning":
-            # state = getState(board)
-        state = tuple(board.flatten())  # Chuyển board thành tuple
-        if state not in qTable:
-            qTable[state] = np.zeros(boardRows * boardCols)
-        move = chooseAction(board, boardRows, boardCols, state, 0, qTable)
+    # elif algorithm == "QLearning":
+    #         # state = getState(board)
+    #     state = tuple(board.flatten())  # Chuyển board thành tuple
+    #     if state not in qTable:
+    #         qTable[state] = np.zeros(boardRows * boardCols)
+    #     move = chooseAction(board, boardRows, boardCols, state, 0, qTable)
         
     if move and availableSquare(board, move[0], move[1]):
         markSquare(board, move[0], move[1], 2)

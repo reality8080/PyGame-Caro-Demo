@@ -4,17 +4,17 @@ import MarkSquare
 from checkWin import checkWin
 from isFullBoard import isBoardFull
 from QLearning.ChooseAction import chooseAction
-from InformedSearch.miniMax import bestMove,evaluatedMiniMax
+from InformedSearch.miniMax import bestMove, evaluatedMiniMax
 
-qTable={}
-alpha=0.1
-gamma=0.9
-epsilon=1.0
-epsilonMin=0.01
-epsilonDecay=0.995
+qTable = {}
+alpha = 0.1
+gamma = 0.9
+epsilon = 1.0
+epsilonMin = 0.01
+epsilonDecay = 0.995
 
 def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
-    """Huấn luyện Q-learning cho trò chơi trên bàn cờ.
+    """Huấn luyện Q-learning cho trò chơi Caro trên bàn cờ.
 
     Args:
         boardRows (int): Số hàng của bàn cờ.
@@ -46,6 +46,8 @@ def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
 
         while steps < maxSteps:
             steps += 1
+
+            # AI (player 2) move
             action = chooseAction(board, boardRows, boardCols, state, epsilon, qTable, searchAlgorithm)
             if action is None:
                 result = "No Valid Moves"
@@ -54,50 +56,46 @@ def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
             if random.random() < epsilon:
                 explorationCount += 1
             
-            # Thực hiện nước đi cho AI (player 2)
+            # Apply AI move
+            action_idx = action[0] * boardCols + action[1]
+            MarkSquare.markSquare(board, action[0], action[1], 2)
+            newState = tuple(board.flatten())
 
-            
+            # Check AI win
             reward = 0
-            opponentMove = bestMove(board, boardRows, boardCols, player=1)
-            if opponentMove:
-                MarkSquare.markSquare(board, opponentMove[0], opponentMove[1], 1)
-                newState = tuple(board.flatten())
-                if checkWin(board, 1, boardRows, boardCols):  # Đối thủ thắng
-                    reward = -1
-                    result = "Loss"
-                    lossCount += 1
-                    totalReward += reward
-                else:
-                    action_idx = action[0] * boardCols + action[1]
-                    MarkSquare.markSquare(board, action[0], action[1], 2)
-                    newState = tuple(board.flatten())                   
-            # Tính phần thưởng
-                    if checkWin(board, 2, boardRows, boardCols):  # AI thắng
-                        reward = 1
-                        result = "Win"
-                        winCount += 1
+            if checkWin(board, 2, boardRows, boardCols):
+                reward = 100  # Large reward for winning
+                result = "Win"
+                winCount += 1
+                totalReward += reward
+            elif isBoardFull(board, boardRows, boardCols):
+                reward = 0
+                result = "Draw"
+                drawCount += 1
+                totalReward += reward
+            else:
+                # Opponent (player 1) move
+                opponentMove = bestMove(board, boardRows, boardCols, player=1)
+                if opponentMove:
+                    MarkSquare.markSquare(board, opponentMove[0], opponentMove[1], 1)
+                    newState = tuple(board.flatten())
+                    if checkWin(board, 1, boardRows, boardCols):
+                        reward = -100  # Large penalty for losing
+                        result = "Loss"
+                        lossCount += 1
                         totalReward += reward
-                    elif isBoardFull(board, boardRows, boardCols):  # Hòa
-                        reward = 0
-                        result = "Draw"
-                        drawCount += 1
-                        totalReward += reward
-                        # Đối thủ đi (player 1)
                     else:
-                        # Không có nước đi cho đối thủ, AI thắng
-                        reward = 1
-                        result = "Win"
-                        winCount += 1
+                        # Intermediate reward based on board evaluation
+                        boardTuple = tuple(tuple(row) for row in board)
+                        score = evaluatedMiniMax(boardTuple, 2, boardRows, boardCols)
+                        reward += score * 0.01  # Scale to avoid overpowering win/loss rewards
                         totalReward += reward
-            
-            # Phần thưởng bổ sung từ evaluatedMiniMax
-            if steps % 5 == 0 and result == "In Progress":
-                boardTuple = tuple(tuple(row) for row in board)
-                score = evaluatedMiniMax(boardTuple, 2, boardRows, boardCols)
-                reward += score  # Đã chuẩn hóa trong evaluatedMiniMax
-                totalReward += score
-            
-            # Cập nhật Q-table
+                else:
+                    # No opponent move, but game not full (rare case)
+                    reward = 10  # Small reward for opponent having no moves
+                    totalReward += reward
+
+            # Update Q-table
             if newState not in qTable:
                 qTable[newState] = np.zeros(boardRows * boardCols)
             maxFutureQ = np.max(qTable[newState])
@@ -107,24 +105,24 @@ def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
             if result != "In Progress":
                 break
         
-        # Cập nhật epsilon
+        # Update epsilon
         epsilon = max(epsilonMin, epsilon * epsilonDecay)
         
-        # Tính các chỉ số
+        # Calculate metrics
         avg_q = np.mean([qTable[s][a] for s in qTable for a in range(len(qTable[s])) if qTable[s][a] != 0]) if qTable else 0
-        valid_moves = len([(r, c) for r in range(boardRows) for c in range(boardCols) if board[r][c] == 0])
+        valid_moves = np.count_nonzero(board == 0)
         q_table_size = len(qTable)
-        exploration_rate = explorationCount / (steps + 1) if steps > 0 else 0
+        exploration_rate = explorationCount / steps if steps > 0 else 0
+        win_rate = winCount / (episode + 1) if episode > 0 else 0
         
-        # In thông tin
+        # Log information
         if episode % 100 == 0:
-            win_rate = winCount / (episode + 1) if episode > 0 else 0
             print(f"Episode {episode}, Epsilon: {epsilon:.4f}, Total Reward: {totalReward:.2f}, "
                   f"Steps: {steps}, Result: {result}, Win Rate: {win_rate:.2f}, "
                   f"Avg Q-value: {avg_q:.4f}, Valid Moves: {valid_moves}, Q-table Size: {q_table_size}, "
                   f"Exploration Rate: {exploration_rate:.2f}")
         
-        # Lưu lịch sử
+        # Save history
         history.append({
             'episode': episode,
             'epsilon': epsilon,
@@ -140,14 +138,8 @@ def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
             'exploration_rate': exploration_rate
         })
         
-        # Cắt tỉa Q-table (tùy chọn)
-        if q_table_size > 100000:  # Giới hạn kích thước
+        # Prune Q-table if too large
+        if q_table_size > 100000:
             qTable = {k: v for k, v in sorted(qTable.items(), key=lambda x: np.max(np.abs(x[1])), reverse=True)[:50000]}
 
-    # Lưu lịch sử vào CSV
-    # with open('q_learning_history.csv', 'w', newline='') as f:
-    #     writer = csv.DictWriter(f, fieldnames=history[0].keys())
-    #     writer.writeheader()
-    #     writer.writerows(history)
-    
     return qTable, history

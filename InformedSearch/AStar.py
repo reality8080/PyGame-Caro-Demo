@@ -67,7 +67,7 @@ def AStar(board,boardRows,boardCols,player=2):
                 if checkWin(board,opponent, boardRows,boardCols):
                     board[row][col]=0
                     markSquare(board,row,col,player)
-                    return True
+                    # return True
                 board[row][col]=0
     
     for row in range(boardRows):
