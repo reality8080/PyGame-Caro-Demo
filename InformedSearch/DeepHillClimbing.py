@@ -1,25 +1,29 @@
 from checkWin import checkWin
 from MarkSquare import markSquare
+import random
 
 def heuristic(board, player, boardRows,boardCols):
     score = 0
+    opponent = 3 - player
+
+    if checkWin(board,player,boardRows,boardCols):
+        return 1000
+    elif checkWin(board,opponent,boardRows,boardCols):
+        return -1000
+
     for r in range(boardRows):
         for c in range(boardCols):
             if board[r][c] == player:
                 score += 10
-            elif board[r][c] == 3 - player:
+            elif board[r][c] == opponent:
                 score -= 10
-
-    if checkWin(board, player,boardRows,boardCols):
-        return 1000
-    elif checkWin(board, 3-player,boardRows,boardCols):
-        return -1000
 
     return score
 
-def DeepHillClimbing(board, boardRows,boardCols, player=2):
-    best_score = heuristic(board, player, boardRows, boardCols)
-    best_move = None
+def DeepHillClimbing(board, boardRows, boardCols, player=2):
+    current_score = heuristic(board, player, boardRows, boardCols)
+    best_score = current_score
+    best_moves = []
 
     for r in range(boardRows):
         for c in range(boardCols):
@@ -28,14 +32,18 @@ def DeepHillClimbing(board, boardRows,boardCols, player=2):
                 score = heuristic(board, player, boardRows, boardCols)
                 if score > best_score:
                     best_score = score
-                    best_move = (r, c)
-                    board[r][c] = 0
-                if best_move:
-                    best_score= score
-                    best_move = (r, c)
-    if best_move:
-        # r, c = best_move
-        # markSquare(board, r, c, player)
-        return best_move
+                    best_moves = [(r, c)]
+                elif score == best_score:
+                    best_moves.append((r, c))
+                board[r][c] = 0
+
+    if best_moves:
+        r, c = random.choice(best_moves) 
+        # return True
+        return (r,c)
     else:
+        empty = [(r, c) for r in range(boardRows) for c in range(boardCols) if board[r][c] == 0]
+        if empty:
+            r, c = random.choice(empty)
+            return (r,c)
         return None

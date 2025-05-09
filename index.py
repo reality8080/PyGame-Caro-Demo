@@ -10,8 +10,11 @@ from InformedSearch.AStar import AStar
 from UnInformedSearch.and_or import bestMoveAndOr
 from UnInformedSearch.UCS import ucs
 from isFullBoard import isBoardFull
-from Draw import drawLines, drawFigures
+from Draw import drawLines,  drawFigures
 from availableSquare import availableSquare
+from MarkSquare import markSquare
+from InformedSearch.Backtracking import bestMoveBacktracking
+from game_logger import GameLogger
 from MarkSquare import markSquare
 from InformedSearch.DeepHillClimbing import DeepHillClimbing
 from QLearning.trainQLearning import trainQLearning
@@ -90,9 +93,11 @@ def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history
         move = ucs(board, 2, boardRows, boardCols)
     elif algorithm == "AndOr":
         move = bestMoveAndOr(board, 2, boardRows, boardCols)
-    # elif algorithm == "QLearning":
-    #     state = getState(board)
-    #     move = chooseAction(board, boardRows, boardCols, state, 0, qTable)  # epsilon=0 để khai thác
+    elif (algorithm == "DHClimbing"):
+        move = DeepHillClimbing(board, boardRows, boardCols)
+                            # 
+    elif (algorithm == "Backtracking"):
+        move = bestMoveBacktracking(board, boardRows, boardCols)
         
     # elif algorithm == "QLearning":
     #         # state = getState(board)
@@ -161,10 +166,13 @@ def start(algorithm="MiniMax"):
     board = np.zeros((boardRows, boardCols))
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     move_history = []
+    game_logger = GameLogger()
+
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                game_logger.save_log()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and not gameOver and player == 1:

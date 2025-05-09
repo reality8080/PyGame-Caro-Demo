@@ -2,9 +2,9 @@ import pygame
 import sys
 import index
 import settings
-
+from game_logger import GameLogger
 pygame.init()
-
+game_logger = GameLogger()
 def drawButton(button, text, isHover):
     color = buttonColorHover if isHover else buttonColor
     pygame.draw.rect(screen, color, button, border_radius=10)
