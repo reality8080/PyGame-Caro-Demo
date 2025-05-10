@@ -70,7 +70,6 @@ def settings():
 
         # Vẽ tất cả các nút
         drawButton(buttonAStar,  "A*",  buttonAStar.collidepoint(mouseX,  mouseY))
-        drawButton(buttonBFS,  "BFS",  buttonBFS.collidepoint(mouseX,  mouseY))
         drawButton(buttonMiniMax,  "MiniMax", 
                    buttonMiniMax.collidepoint(mouseX,  mouseY))
         drawButton(buttonUCS, "UCS", buttonUCS.collidepoint(mouseX, mouseY))  
@@ -90,9 +89,6 @@ def settings():
                 if buttonAStar.collidepoint(mouseX, mouseY):
                     selectedAlgorithm = "A*"
                     return "Astar"
-                elif buttonBFS.collidepoint(mouseX, mouseY):
-                    selectedAlgorithm = "BestFirstSearch"
-                    return "BestFirstSearch"
                 elif buttonMiniMax.collidepoint(mouseX, mouseY):
                     selectedAlgorithm = "MiniMax"
                     return "MiniMax"
@@ -122,13 +118,12 @@ space = 70
 weightBtn,heightBtn=220,50
 
 buttonAStar = pygame.Rect(buttonWidth, buttonHeight, weightBtn, heightBtn)
-buttonBFS = pygame.Rect(buttonWidth, buttonHeight + space, weightBtn, heightBtn)
-buttonMiniMax = pygame.Rect(buttonWidth, buttonHeight + space * 2, weightBtn,heightBtn)
-buttonDHClimbing=pygame.Rect(buttonWidth,buttonHeight+space*3,weightBtn, heightBtn)
-buttonUCS = pygame.Rect(buttonWidth, buttonHeight + space * 4, weightBtn, heightBtn)
-buttonAndOr = pygame.Rect(buttonWidth, buttonHeight + space * 5, weightBtn, heightBtn)
-buttonQLearning = pygame.Rect(buttonWidth, buttonHeight + space * 6, weightBtn, heightBtn)
-buttonBackTracking=pygame.Rect(buttonWidth, buttonHeight + space * 7, weightBtn, heightBtn)
+buttonMiniMax = pygame.Rect(buttonWidth, buttonHeight + space , weightBtn,heightBtn)
+buttonDHClimbing=pygame.Rect(buttonWidth,buttonHeight+space*2,weightBtn, heightBtn)
+buttonUCS = pygame.Rect(buttonWidth, buttonHeight + space * 3, weightBtn, heightBtn)
+buttonAndOr = pygame.Rect(buttonWidth, buttonHeight + space * 4, weightBtn, heightBtn)
+buttonQLearning = pygame.Rect(buttonWidth, buttonHeight + space * 5, weightBtn, heightBtn)
+buttonBackTracking=pygame.Rect(buttonWidth, buttonHeight + space * 6, weightBtn, heightBtn)
 
 
 selectedAlgorithm = "MiniMax"
