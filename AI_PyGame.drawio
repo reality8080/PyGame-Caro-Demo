@@ -10,17 +10,8 @@
         <mxCell id="LOpj9IDbqsxbHJfjbZ30-3" value="Khởi tạo các tham số cần thiết&lt;div&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(alpha, gamma, epsilon, epsilonMin, epsilonDecay)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="-441" y="-463" width="209" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="LOpj9IDbqsxbHJfjbZ30-4" value="&lt;p style=&quot;white-space: pre-wrap;&quot; dir=&quot;auto&quot;&gt;Tải Q-Table&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-400" y="-343" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="LOpj9IDbqsxbHJfjbZ30-5" value="&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Khởi tạo&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;history, winCount, lossCount, drawCount, explorationCount&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-421" y="-250" width="169" height="60" as="geometry" />
-        </mxCell>
         <mxCell id="LOpj9IDbqsxbHJfjbZ30-6" value="Bắt đầu" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="-400" y="-564" width="120" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="LOpj9IDbqsxbHJfjbZ30-9" value="&lt;p style=&quot;white-space-collapse: preserve;&quot; dir=&quot;auto&quot;&gt;For episode in range(episodes)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-400" y="-38" width="178" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
