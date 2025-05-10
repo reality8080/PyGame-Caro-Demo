@@ -520,5 +520,29 @@
         "Elapsed Time (s)": 0.00175,
         "RAM Used (MB)": 67.18,
         "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.001297,
+        "RAM Used (MB)": 65.34,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.003131,
+        "RAM Used (MB)": 65.5,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.00236,
+        "RAM Used (MB)": 65.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.00121,
+        "RAM Used (MB)": 65.56,
+        "ROM Used (MB)": 0.0
     }
 ]
