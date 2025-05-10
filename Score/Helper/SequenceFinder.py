@@ -124,12 +124,12 @@ class SequenceFinder:
             for col in range(self.boardCols):
                 if self.board[row][col] == 0:
                     self.board[row][col] = player
-                    playerThreats = sum(1 for seq in self.find_sequences(2, player) if seq.blockedEnds <= 1)
+                    playerThreats = sum(1 for seq in self.find_sequences(3, player) if seq.blockedEnds <= 1)
                     self.board[row][col] = 0
                     if playerThreats >= 2:
                         doubleThreatScore += 500
                     self.board[row][col] = opponent
-                    opponentThreats = sum(1 for seq in self.find_sequences(2, opponent) if seq.blockedEnds <= 1)
+                    opponentThreats = sum(1 for seq in self.find_sequences(3, opponent) if seq.blockedEnds <= 1)
                     self.board[row][col] = 0
                     if opponentThreats >= 2:
                         doubleThreatScore -= 500
@@ -153,5 +153,9 @@ class SequenceFinder:
         sequences = self.find_sequences(3, player)
         liveThreeScore += sum(2000 for seq in sequences if seq.blockedEnds == 0)
         sequences = self.find_sequences(3, opponent)
-        liveThreeScore -= sum(2000 for seq in sequences if seq.blockedEnds == 0)
+        for seq in sequences:
+            if seq.blockedEnds == 0:
+                liveThreeScore -= 2000
+            elif seq.blockedEnds == 1:
+                liveThreeScore -= 800
         return liveThreeScore

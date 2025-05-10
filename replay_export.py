@@ -8,10 +8,14 @@ def save_caro_replay_gif(board_history, output_file="caro_replay.gif"):
         print("Không có dữ liệu để tạo replay.")
         return
 
+    # 🔧 Tự động xác định kích thước bàn cờ
+    max_row = max(move[0] for move in board_history) + 1
+    max_col = max(move[1] for move in board_history) + 1
+    boardRows = max_row
+    boardCols = max_col
+
     pygame.init()
 
-    boardRows = 5
-    boardCols = 5
     WIDTH, HEIGHT = 600, 600
     squareSize = WIDTH // boardCols
     LINE_WIDTH = 6
@@ -36,6 +40,7 @@ def save_caro_replay_gif(board_history, output_file="caro_replay.gif"):
         # Vẽ lưới
         for i in range(1, boardRows):
             pygame.draw.line(screen, LINE_COLOR, (0, i * squareSize), (WIDTH, i * squareSize), LINE_WIDTH)
+        for i in range(1, boardCols):
             pygame.draw.line(screen, LINE_COLOR, (i * squareSize, 0), (i * squareSize, HEIGHT), LINE_WIDTH)
 
         # Vẽ O và X

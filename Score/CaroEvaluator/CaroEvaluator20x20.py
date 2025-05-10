@@ -6,12 +6,12 @@ DEFAULT_WEIGHTS = {
     1: 10,      # Chuỗi 1: nhỏ nhưng vẫn có giá trị
     2: 50,      # Chuỗi 2: có tiềm năng phát triển
     3: 10000,     # Chuỗi 3: đáng chú ý
-    4: 50000,    # Chuỗi 4: rất nguy hiểm
+    4: 100000,    # Chuỗi 4: rất nguy hiểm
     5: float('inf')   # Chuỗi 5: gần thắng
 }
 BLOCKED_PENALTY = {
-    0: 2.0,   # Mở cả 2 đầu: nhân 2.5
-    1: 0.8,   # Mở 1 đầu: nhân 1
+    0: 3.0,   # Mở cả 2 đầu: nhân 2.5
+    1: 0.2,   # Mở 1 đầu: nhân 1
     2: 0.0    # Bị chặn 2 đầu: nhân 0
 }
 POTENTIAL_EXTENSION_BONUS = 10
@@ -73,5 +73,7 @@ class CaroEvaluator20x20:
 
         # Double threats
         totalScore += finder.detectDoubleThreat(player)
+        adjustedScore = baseScore * BLOCKED_PENALTY.get(sequence.blockedEnds, 0)
+        totalScore -= adjustedScore * 1.5 
         return totalScore
     
