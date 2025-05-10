@@ -29,7 +29,7 @@ def AStar(board,boardRows,boardCols,player=2):
                 board[row][col]=opponent
                 if checkWin(board,opponent, boardRows,boardCols):
                     board[row][col]=0
-                    markSquare(board,row,col,player)
+                    return (row, col)
                 board[row][col]=0
     
     for row in range(boardRows):
@@ -37,7 +37,7 @@ def AStar(board,boardRows,boardCols,player=2):
             if board[row][col]==0:
                 board[row][col]=player
                 h=evaluatedAStar(board,player,boardRows,boardCols)
-                g = np.count_nonzero(board == 0)
+                g = boardCols*boardRows- np.count_nonzero(board == 0)
                 f=h+g
                 heapq.heappush(pq,(-f,row,col))
                 board[row][col]=0
