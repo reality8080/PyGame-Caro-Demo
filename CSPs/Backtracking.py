@@ -1,5 +1,5 @@
-from checkWin import checkWin
-from MarkSquare import markSquare
+from Function.checkWin import checkWin
+from Function.MarkSquare import markSquare
 from collections import deque
 
 

@@ -1,5 +1,5 @@
-from checkWin import checkWin
-from isFullBoard import isBoardFull
+from Function.checkWin import checkWin
+from Function.isFullBoard import isBoardFull
 # from MarkSquare import markSquare
 from functools import lru_cache
 # from copy import deepcopy

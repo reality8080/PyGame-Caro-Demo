@@ -1,5 +1,5 @@
-from checkWin import checkWin
-from MarkSquare import markSquare
+from Function.checkWin import checkWin
+from Function.MarkSquare import markSquare
 
 def evaluateBoard(board, boardRows, boardCols):
     def get_line_score(line, player):

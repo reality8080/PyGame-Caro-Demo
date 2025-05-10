@@ -3,9 +3,9 @@ import random
 import pickle
 import os
 
-import MarkSquare
-from checkWin import checkWin
-from isFullBoard import isBoardFull
+import Function.MarkSquare as MarkSquare
+from Function.checkWin import checkWin
+from Function.isFullBoard import isBoardFull
 from QLearning.ChooseAction import chooseAction
 from InformedSearch.miniMax import bestMove, evaluatedMiniMax
 

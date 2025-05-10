@@ -4,22 +4,23 @@ import pygame
 from collections import deque
 import asyncio
 
-from checkWin import checkWin
+from Function.checkWin import checkWin
 from InformedSearch.miniMax import bestMove
 from InformedSearch.AStar import AStar
-from UnInformedSearch.and_or import bestMoveAndOr
+from ComplexEnv.and_or import bestMoveAndOr
 from UnInformedSearch.UCS import ucs
-from isFullBoard import isBoardFull
-from Draw import drawLines,  drawFigures
-from availableSquare import availableSquare
-from MarkSquare import markSquare
-from InformedSearch.Backtracking import bestMoveBacktracking
+from Function.isFullBoard import isBoardFull
+from Function.Draw import drawLines,  drawFigures
+from Function.availableSquare import availableSquare
+from Function.MarkSquare import markSquare
+from CSPs.Backtracking import bestMoveBacktracking
 from game_logger import GameLogger
-from MarkSquare import markSquare
-from InformedSearch.DeepHillClimbing import DeepHillClimbing
+from Function.MarkSquare import markSquare
+from LocalSearch.DeepHillClimbing import DeepHillClimbing
 from QLearning.trainQLearning import trainQLearning
 from QLearning.ChooseAction import chooseAction
 from QLearning.getState import getState
+from PlayGame.settings import settings
 
 pygame.init()
 
@@ -36,8 +37,8 @@ WIDTH = 600
 HEIGHT = 600
 LINEWIDTH = 5
 FPS = 60
-boardRows = 10
-boardCols = 10
+boardRows = 3
+boardCols = 3
 squareSize = WIDTH // boardCols
 circleRadius = squareSize // 3
 circleWidth = 15
@@ -188,7 +189,6 @@ def start(algorithm="MiniMax"):
                     gameOver = False
                     player = 1
                 elif event.key == pygame.K_s:
-                    from settings import settings
                     algo = settings()
                     start(algo)
                 elif event.key == pygame.K_q:
@@ -197,7 +197,7 @@ def start(algorithm="MiniMax"):
                 elif event.key == pygame.K_p:
                     replay(screen, move_history)
                 elif event.key == pygame.K_g:
-                    from replay_export import save_caro_replay_gif
+                    from Function.replay_export import save_caro_replay_gif
                     save_caro_replay_gif(move_history, "caro_replay.gif")
 
 

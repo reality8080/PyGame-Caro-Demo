@@ -1,6 +1,6 @@
 import numpy as np
 from Score.Helper.SequenceFinder import SequenceFinder
-from checkWin import checkWin
+from Function.checkWin import checkWin
 
 DEFAULT_WEIGHTS = {
     1: 10,      # Chuỗi 1: nhỏ nhưng vẫn có giá trị
@@ -11,7 +11,7 @@ DEFAULT_WEIGHTS = {
 }
 BLOCKED_PENALTY = {
     0: 3.0,   # Mở cả 2 đầu: nhân 2.5
-    1: 0.2,   # Mở 1 đầu: nhân 1
+    1: 2.5,   # Mở 1 đầu: nhân 1
     2: 0.0    # Bị chặn 2 đầu: nhân 0
 }
 POTENTIAL_EXTENSION_BONUS = 10

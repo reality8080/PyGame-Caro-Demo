@@ -1,7 +1,6 @@
 import pygame
 import sys
-import index
-import settings
+from PlayGame import index,settings
 from game_logger import GameLogger
 pygame.init()
 game_logger = GameLogger()
