@@ -184,6 +184,7 @@ def miniMax(board, boardRows, boardCols, depth, isMaximizing, alpha, beta, playe
 def bestMove(board, boardRows, boardCols, player=2):
     bestScore = float('-inf')
     move = None
+    opponnent=3-player
     moves = getCandidateMoves(board, boardRows, boardCols, player=player)
     if not moves:
         return None
@@ -193,14 +194,27 @@ def bestMove(board, boardRows, boardCols, player=2):
     sortedMoves = sorted(scoredMoves, key=lambda x: x[2], reverse=True)
     
     for row, col, _ in sortedMoves:
-        if board[row][col] == 0:
-            board[row][col] = player
-            score = miniMax(board, boardRows, boardCols, 0, False, float('-inf'), float('inf'), player)
+        if board[row][col] != 0:
+            continue
+        board[row][col] = player
+        if checkWin(board, player, boardRows, boardCols):
             board[row][col] = 0
-            # assert board[row][col] == 0, f"Failed to reset board at ({row}, {col})"
-            # print(f"Evaluated move ({row}, {col}) with score {score}")
-            if score > bestScore:
-                bestScore = score
-                move = (row, col)
-    
+            return (row, col)
+        board[row][col] = 0
+        
+        board[row][col] = opponnent
+        if checkWin(board, opponnent, boardRows, boardCols):
+            board[row][col] = 0
+            return (row, col)
+        board[row][col] = 0
+        
+        board[row][col] = player
+        score = miniMax(board, boardRows, boardCols, 0, False, float('-inf'), float('inf'), player)
+        board[row][col] = 0
+        # assert board[row][col] == 0, f"Failed to reset board at ({row}, {col})"
+        # print(f"Evaluated move ({row}, {col}) with score {score}")
+        if score > bestScore:
+            bestScore = score
+            move = (row, col)
+
     return move

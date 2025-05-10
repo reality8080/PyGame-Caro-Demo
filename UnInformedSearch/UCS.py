@@ -2,26 +2,37 @@ from checkWin import checkWin
 from MarkSquare import markSquare
 import numpy as np
 
-def evaluateBoard(board, boardRows, boardCols):
-    def get_line_score(line, player):
-        opp = 1 if player == 2 else 2
-        if line.count(player) == 5:
-            return 1000
-        elif line.count(player) == 4 and line.count(0) == 1:
-            return 200
-        elif line.count(player) == 3 and line.count(0) == 2:
-            return 50
-        elif line.count(opp) == 5:
-            return -1000
-        elif line.count(opp) == 4 and line.count(0) == 1:
-            return -300
-        elif line.count(opp) == 3 and line.count(0) == 2:
-            return -70
-        return 0
+from Score.CaroEvaluator.CaroEvaluator20x20 import CaroEvaluator20x20
+class EvaluatedUCS:
+    def __init__(self, board, boardRows, boardCols):
+        if not isinstance(board, np.ndarray) or board.shape != (boardRows, boardCols):
+            raise ValueError("Invalid board or dimensions")
+        self.board = board
+        self.boardRows = boardRows
+        self.boardCols = boardCols
+        # self.sequenceFinder = SequenceFinder(board, boardRows, boardCols)
+        self.evaluator = CaroEvaluator20x20()
+        self.cache = {}
+        
+    def evaluate(self, player):
+        if player not in [1, 2]:
+            raise ValueError("Invalid player ID")
+        board_tuple = tuple(map(tuple, self.board))
+        cache_key = (board_tuple, player)
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+        
+        score = self.evaluator.evaluate(self.board, player, self.boardRows, self.boardCols)
+        self.cache[cache_key] = score
+        return score    
 
-    score = 0
+def evaluatedUCS(checkBoard,player, boardRows,boardCols):
+    myEvaluator = EvaluatedUCS(checkBoard, boardRows, boardCols)
+    return myEvaluator.evaluate(player)
 
-    # Duyệt theo 4 hướng
+
+def getScore(board, boardRows, boardCols):
+
     directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  # ngang, dọc, chéo \, chéo /
 
     for row in range(boardRows):
@@ -36,7 +47,7 @@ def evaluateBoard(board, boardRows, boardCols):
                     else:
                         break
                 if len(line) == 5:
-                    score += get_line_score(line, 2)  # 2 là AI
+                    score += evaluatedUCS(board, 2, boardRows,boardCols)  # 2 là AI
     return score
 
 
@@ -46,7 +57,7 @@ def heuristic(board, row, col, player, boardRows, boardCols):
     if checkWin(board, player, boardRows, boardCols):
         score = 1000
     else:
-        score = evaluateBoard(board, boardRows, boardCols)
+        score = evaluatedUCS(board, boardRows, boardCols)
     board[row][col] = 0
     return score
 
@@ -59,7 +70,7 @@ def ucs(board, player, boardRows, boardCols):
         for col in range(boardCols):
             if board[row][col] == 0:
                 board[row][col] = player
-                score = evaluateBoard(board, boardRows, boardCols)
+                score = evaluatedUCS(board, boardRows, boardCols)
                 board[row][col] = 0
 
                 if score > bestScore:

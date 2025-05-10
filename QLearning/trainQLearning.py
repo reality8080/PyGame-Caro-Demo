@@ -1,5 +1,8 @@
 import numpy as np
 import random
+import pickle
+import os
+
 import MarkSquare
 from checkWin import checkWin
 from isFullBoard import isBoardFull
@@ -14,19 +17,10 @@ epsilonMin = 0.01
 epsilonDecay = 0.995
 
 def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
-    """Huấn luyện Q-learning cho trò chơi Caro trên bàn cờ.
 
-    Args:
-        boardRows (int): Số hàng của bàn cờ.
-        boardCols (int): Số cột của bàn cờ.
-        episodes (int): Số episode huấn luyện.
-        searchAlgorithm: Thuật toán tìm kiếm (nếu có, ví dụ: Minimax).
-
-    Returns:
-        dict: Q-table đã được huấn luyện.
-        list: Lịch sử các chỉ số qua các episode.
-    """
     global epsilon, qTable
+    qTable = loadQTable("qtable.pkl")
+
     history = []
     explorationCount = 0
     winCount = 0
@@ -141,5 +135,16 @@ def trainQLearning(boardRows, boardCols, episodes, searchAlgorithm=None):
         # Prune Q-table if too large
         if q_table_size > 100000:
             qTable = {k: v for k, v in sorted(qTable.items(), key=lambda x: np.max(np.abs(x[1])), reverse=True)[:50000]}
-
+    saveQTable(qTable, "qtable.pkl")
     return qTable, history
+
+
+def saveQTable(qTable, filename="qtable.pkl"):
+    with open(filename, "wb") as f:
+        pickle.dump(qTable, f)
+
+def loadQTable(filename="qtable.pkl"):
+    if os.path.exists(filename):
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    return {}
