@@ -1,24 +1,54 @@
 from Function.checkWin import checkWin
-from Function.MarkSquare import markSquare
 import random
 
-def heuristic(board, player, boardRows,boardCols):
-    score = 0
+
+def evaluate_line(line, player):
     opponent = 3 - player
+    if opponent in line:
+        return 0
+    return line.count(player)
 
-    if checkWin(board,player,boardRows,boardCols):
-        return 1000
-    elif checkWin(board,opponent,boardRows,boardCols):
-        return -1000
 
+def heuristic(board, player, boardRows, boardCols):
+    opponent = 3 - player
+    winCondition = min(5, min(boardRows, boardCols))
+
+    if checkWin(board, player, boardRows, boardCols):
+        return 10000
+    elif checkWin(board, opponent, boardRows, boardCols):
+        return -10000
+
+    score = 0
+
+    # Duyệt tất cả dòng, cột, chéo có thể tạo thành chuỗi thắng
     for r in range(boardRows):
         for c in range(boardCols):
-            if board[r][c] == player:
-                score += 10
-            elif board[r][c] == opponent:
-                score -= 10
+            lines = []
+
+            # Hàng ngang
+            if c + winCondition <= boardCols:
+                lines.append([board[r][c + i] for i in range(winCondition)])
+
+            # Hàng dọc
+            if r + winCondition <= boardRows:
+                lines.append([board[r + i][c] for i in range(winCondition)])
+
+            # Chéo chính \
+            if r + winCondition <= boardRows and c + winCondition <= boardCols:
+                lines.append([board[r + i][c + i]
+                             for i in range(winCondition)])
+
+            # Chéo phụ /
+            if r - winCondition + 1 >= 0 and c + winCondition <= boardCols:
+                lines.append([board[r - i][c + i]
+                             for i in range(winCondition)])
+
+            for line in lines:
+                score += evaluate_line(line, player) * 10
+                score -= evaluate_line(line, opponent) * 8  # Chặn đối thủ
 
     return score
+
 
 def DeepHillClimbing(board, boardRows, boardCols, player=2):
     current_score = heuristic(board, player, boardRows, boardCols)
@@ -38,12 +68,10 @@ def DeepHillClimbing(board, boardRows, boardCols, player=2):
                 board[r][c] = 0
 
     if best_moves:
-        r, c = random.choice(best_moves) 
-        # return True
-        return (r,c)
+        return random.choice(best_moves)
     else:
-        empty = [(r, c) for r in range(boardRows) for c in range(boardCols) if board[r][c] == 0]
+        empty = [(r, c) for r in range(boardRows)
+                 for c in range(boardCols) if board[r][c] == 0]
         if empty:
-            r, c = random.choice(empty)
-            return (r,c)
+            return random.choice(empty)
         return None

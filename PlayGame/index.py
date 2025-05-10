@@ -3,6 +3,7 @@ import numpy as np
 import pygame
 from collections import deque
 import asyncio
+import time
 
 from Function.checkWin import checkWin
 from InformedSearch.miniMax import bestMove
@@ -20,6 +21,7 @@ from LocalSearch.DeepHillClimbing import DeepHillClimbing
 from QLearning.trainQLearning import trainQLearning
 from QLearning.ChooseAction import chooseAction
 from QLearning.getState import getState
+from performance import PerformanceLogger
 from PlayGame.settings import settings
 
 pygame.init()
@@ -64,7 +66,7 @@ crossWidth = 25
 
 # khởi tạo game
 
-# qTable,_=trainQLearning(boardRows,boardCols,episodes=10000,searchAlgorithm="MiniMax")
+qTable,_=trainQLearning(boardRows,boardCols,episodes=10000,searchAlgorithm="MiniMax")
 
 
 def checkGameOver(board, player, boardRows, boardCols):
@@ -74,6 +76,7 @@ def checkGameOver(board, player, boardRows, boardCols):
         return True, 0
     return False, None
 
+
 def handlePlayerMove(board, row, col, player, move_history):
     if availableSquare(board, row, col):
         markSquare(board, row, col, player)
@@ -81,8 +84,10 @@ def handlePlayerMove(board, row, col, player, move_history):
         return True
     return False
 
-def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history):
+
+def handleAIMove(board: np.ndarray, algorithm, boardRows, boardCols, move_history, performance_logger):
     move = None
+    start_time = time.time()
     if algorithm == "Astar":
         move = AStar(board, boardRows, boardCols)
     elif algorithm == "MiniMax":
@@ -95,20 +100,21 @@ def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history
         move = bestMoveAndOr(board, 2, boardRows, boardCols)
     elif (algorithm == "DHClimbing"):
         move = DeepHillClimbing(board, boardRows, boardCols)
-                            # 
+        #
     elif (algorithm == "Backtracking"):
         move = bestMoveBacktracking(board, boardRows, boardCols)
-        
-    # elif algorithm == "QLearning":
-            # state = getState(board)
-        # state = tuple(board.flatten())  # Chuyển board thành tuple
-        # if state not in qTable:
-        #     qTable[state] = np.zeros(boardRows * boardCols)
-        # move = chooseAction(board, boardRows, boardCols, state, 0, qTable)
+
+    elif algorithm == "QLearning":
+        state = getState(board)
+        state = tuple(board.flatten())  # Chuyển board thành tuple
+        if state not in qTable:
+            qTable[state] = np.zeros(boardRows * boardCols)
+        move = chooseAction(board, boardRows, boardCols, state, 0, qTable)
         
     if move !=(-1,-1) and availableSquare(board, move[0], move[1]):
         markSquare(board, move[0], move[1], 2)
         move_history.append((move[0], move[1], 2))
+        performance_logger.log(algorithm, start_time)
         return True
     return False
 
@@ -124,11 +130,14 @@ def handleAIMove(board:np.ndarray, algorithm, boardRows, boardCols, move_history
 #         else:
 #             text = font.render("Draw!", True, Blue)
 #     screen.blit(text, (WIDTH // 2 - 100, 10))
-    
+
+
 def drawInstructions(screen):
     font = pygame.font.SysFont(None, 30)
-    text = font.render("R: Restart | S: Settings | Q: Quit | P: Replay", True, White)
+    text = font.render(
+        "R: Restart | S: Settings | Q: Quit | P: Replay", True, White)
     screen.blit(text, (10, HEIGHT - 30))
+
 
 def renderGame(screen, board, boardRows, boardCols, gameOver, winner):
     drawFigures(screen, board, boardRows, squareSize, boardCols, Blue, Red, crossWidth, circleRadius, circleWidth)
@@ -136,13 +145,15 @@ def renderGame(screen, board, boardRows, boardCols, gameOver, winner):
     # drawStatus(screen, 1 if not gameOver else None, gameOver, winner)
     drawInstructions(screen)
     pygame.display.update()
-    
+
+
 def restartGame(screen, board):
     screen.fill(Black)
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     for row in range(boardRows):
         for col in range(boardCols):
             board[row][col] = 0
+
 
 def replay(screen, history):
     board = np.zeros((boardRows, boardCols))
@@ -154,7 +165,7 @@ def replay(screen, history):
         renderGame(screen, board, boardRows, boardCols, False, None)
         pygame.time.wait(500)
     pygame.time.wait(2000)
-    
+
 
 def start(algorithm="MiniMax"):
     player = 1
@@ -167,7 +178,7 @@ def start(algorithm="MiniMax"):
     drawLines(screen, squareSize, boardRows, White, WIDTH, HEIGHT, LINEWIDTH)
     move_history = []
     game_logger = GameLogger()
-
+    performance_logger = PerformanceLogger()
 
     while True:
         for event in pygame.event.get():
@@ -179,12 +190,14 @@ def start(algorithm="MiniMax"):
                 mouseX = event.pos[0] // squareSize
                 mouseY = event.pos[1] // squareSize
                 if handlePlayerMove(board, mouseY, mouseX, player, move_history):
-                    gameOver, winner = checkGameOver(board, player, boardRows, boardCols)
+                    gameOver, winner = checkGameOver(
+                        board, player, boardRows, boardCols)
                     if not gameOver:
                         player = 2
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     restartGame(screen, board)
+
                     move_history.clear()
                     gameOver = False
                     player = 1
@@ -202,8 +215,9 @@ def start(algorithm="MiniMax"):
 
 
         if not gameOver and player == 2:
-            if handleAIMove(board, algorithm, boardRows, boardCols, move_history):
-                gameOver, winner = checkGameOver(board, 2, boardRows, boardCols)
+            if handleAIMove(board, algorithm, boardRows, boardCols, move_history, performance_logger):
+                gameOver, winner = checkGameOver(
+                    board, 2, boardRows, boardCols)
                 if not gameOver:
                     player = 1
 

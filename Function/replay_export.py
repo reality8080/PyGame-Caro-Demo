@@ -8,7 +8,7 @@ def save_caro_replay_gif(board_history, output_file="caro_replay.gif"):
         print("Không có dữ liệu để tạo replay.")
         return
 
-    # 🔧 Tự động xác định kích thước bàn cờ
+    #  Tự động xác định kích thước bàn cờ
     max_row = max(move[0] for move in board_history) + 1
     max_col = max(move[1] for move in board_history) + 1
     boardRows = max_row
