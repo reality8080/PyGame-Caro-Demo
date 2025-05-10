@@ -1,11 +1,14 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0" version="27.0.2">
   <diagram name="Page-1" id="E1j6j_1OJSd3slHDF1Ss">
-    <mxGraphModel dx="1673" dy="1370" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1304" dy="1363" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="LOpj9IDbqsxbHJfjbZ30-1" value="QLearning" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="-172" y="-478" width="74" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="LOpj9IDbqsxbHJfjbZ30-3" value="Khởi tạo các tham số cần thiết&lt;div&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(alpha, gamma, epsilon, epsilonMin, epsilonDecay)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-441" y="-463" width="209" height="75" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
