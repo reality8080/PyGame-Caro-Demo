@@ -5,6 +5,8 @@ import settings
 from game_logger import GameLogger
 pygame.init()
 game_logger = GameLogger()
+
+
 def drawButton(button, text, isHover):
     color = buttonColorHover if isHover else buttonColor
     pygame.draw.rect(screen, color, button, border_radius=10)
@@ -14,6 +16,7 @@ def drawButton(button, text, isHover):
     textRect = textSurface.get_rect(center=button.center)
     screen.blit(textSurface, textRect)
 
+
 def drawLabel(labelTitle, text):
     pygame.draw.rect(screen, (222, 184, 135), labelTitle, border_radius=10)
     pygame.draw.rect(screen, (101, 67, 33), labelTitle, 4, border_radius=10)
@@ -22,11 +25,13 @@ def drawLabel(labelTitle, text):
     textTitle = textSurfaceTitle.get_rect(center=labelTitle.center)
     screen.blit(textSurfaceTitle, textTitle)
 
+
 Width, Height = 800, 600
 screen = pygame.display.set_mode((Width, Height))
 pygame.display.set_caption("Menu")
 
-loadImage = pygame.image.load("./Temple/images/wallpapersden.com_stardew-valley-hd-gaming-background_2560x1700.jpg")
+loadImage = pygame.image.load(
+    "./Temple/images/wallpapersden.com_stardew-valley-hd-gaming-background_2560x1700.jpg")
 loadImage = pygame.transform.scale(loadImage, (Width, Height))
 
 WHITE = (255, 255, 255)
@@ -58,7 +63,8 @@ while running:
     mouseX, mouseY = pygame.mouse.get_pos()
 
     drawButton(buttonStart, "Start", buttonStart.collidepoint(mouseX, mouseY))
-    drawButton(buttonSetting, "Setting", buttonSetting.collidepoint(mouseX, mouseY))
+    drawButton(buttonSetting, "Setting",
+               buttonSetting.collidepoint(mouseX, mouseY))
     drawButton(buttonQuit, "Quit", buttonQuit.collidepoint(mouseX, mouseY))
 
     drawLabel(labelTitle, "Menu")
