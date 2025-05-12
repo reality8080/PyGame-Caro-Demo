@@ -250,5 +250,77 @@
         "Elapsed Time (s)": 0.001927,
         "RAM Used (MB)": 67.67,
         "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.668157,
+        "RAM Used (MB)": 65.35,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.013547,
+        "RAM Used (MB)": 65.7,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.00058,
+        "RAM Used (MB)": 65.73,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 6.6e-05,
+        "RAM Used (MB)": 65.74,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.660773,
+        "RAM Used (MB)": 65.82,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.009285,
+        "RAM Used (MB)": 65.84,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.00064,
+        "RAM Used (MB)": 65.85,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 8.1e-05,
+        "RAM Used (MB)": 65.98,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.001561,
+        "RAM Used (MB)": 66.0,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.000758,
+        "RAM Used (MB)": 66.01,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.00032,
+        "RAM Used (MB)": 66.01,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 6.6e-05,
+        "RAM Used (MB)": 66.07,
+        "ROM Used (MB)": 0.0
     }
 ]
