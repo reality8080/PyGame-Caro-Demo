@@ -40,5 +40,215 @@
         "Elapsed Time (s)": 1.046255,
         "RAM Used (MB)": 67.0,
         "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.66155,
+        "RAM Used (MB)": 66.8,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.01308,
+        "RAM Used (MB)": 66.84,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.000723,
+        "RAM Used (MB)": 66.87,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 8.2e-05,
+        "RAM Used (MB)": 66.88,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.001262,
+        "RAM Used (MB)": 66.91,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "QLearning",
+        "Elapsed Time (s)": 0.002731,
+        "RAM Used (MB)": 66.91,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "DHClimbing",
+        "Elapsed Time (s)": 0.000224,
+        "RAM Used (MB)": 67.04,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "DHClimbing",
+        "Elapsed Time (s)": 0.000162,
+        "RAM Used (MB)": 67.04,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "DHClimbing",
+        "Elapsed Time (s)": 0.000105,
+        "RAM Used (MB)": 67.05,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.002931,
+        "RAM Used (MB)": 67.16,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.002754,
+        "RAM Used (MB)": 67.16,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.001928,
+        "RAM Used (MB)": 67.16,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "MiniMax",
+        "Elapsed Time (s)": 0.227195,
+        "RAM Used (MB)": 67.47,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "MiniMax",
+        "Elapsed Time (s)": 6.5e-05,
+        "RAM Used (MB)": 67.48,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "MiniMax",
+        "Elapsed Time (s)": 0.004782,
+        "RAM Used (MB)": 67.48,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "MiniMax",
+        "Elapsed Time (s)": 0.001172,
+        "RAM Used (MB)": 67.5,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Astar",
+        "Elapsed Time (s)": 0.002836,
+        "RAM Used (MB)": 67.52,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Astar",
+        "Elapsed Time (s)": 8e-06,
+        "RAM Used (MB)": 67.53,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Astar",
+        "Elapsed Time (s)": 1.8e-05,
+        "RAM Used (MB)": 67.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Astar",
+        "Elapsed Time (s)": 0.00097,
+        "RAM Used (MB)": 67.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.001601,
+        "RAM Used (MB)": 67.52,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.000785,
+        "RAM Used (MB)": 67.53,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 0.000404,
+        "RAM Used (MB)": 67.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "AndOr",
+        "Elapsed Time (s)": 6.8e-05,
+        "RAM Used (MB)": 67.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.661519,
+        "RAM Used (MB)": 67.54,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.013053,
+        "RAM Used (MB)": 67.55,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 0.000734,
+        "RAM Used (MB)": 67.56,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "Backtracking",
+        "Elapsed Time (s)": 8.2e-05,
+        "RAM Used (MB)": 67.58,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.002852,
+        "RAM Used (MB)": 67.6,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.002607,
+        "RAM Used (MB)": 67.6,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.001872,
+        "RAM Used (MB)": 67.66,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.000528,
+        "RAM Used (MB)": 67.66,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.002754,
+        "RAM Used (MB)": 67.66,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.00272,
+        "RAM Used (MB)": 67.66,
+        "ROM Used (MB)": 0.0
+    },
+    {
+        "Algorithm": "UCS",
+        "Elapsed Time (s)": 0.001927,
+        "RAM Used (MB)": 67.67,
+        "ROM Used (MB)": 0.0
     }
 ]

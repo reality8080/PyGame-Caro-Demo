@@ -5,9 +5,9 @@ from Function.checkWin import checkWin
 DEFAULT_WEIGHTS = {
     1: 10,      # Chuỗi 1: nhỏ nhưng vẫn có giá trị
     2: 5000,      # Chuỗi 2: có tiềm năng phát triển
-    3: 100000,     # Chuỗi 3: đáng chú ý
-    4: 1000000,    # Chuỗi 4: rất nguy hiểm
-    5: float('inf')   # Chuỗi 5: gần thắng
+    3: float('inf'),     # Chuỗi 3: đáng chú ý
+    # 4: 1000000,    # Chuỗi 4: rất nguy hiểm
+    # 5: float('inf')   # Chuỗi 5: gần thắng
 }
 BLOCKED_PENALTY = {
     0: 3.0,   # Mở cả 2 đầu: nhân 2.5
