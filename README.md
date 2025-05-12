@@ -16,11 +16,6 @@ Solution: Được định nghĩa là chuỗi các nước đi từ trạng thá
 2.1.2. Hình ảnh gif của từng thuật toán khi áp dụng lên trò chơi
 Dự án đã tiến hành cài đặt và ghi lại quá trình thực thi của các thuật toán tìm kiếm không có thông tin khi áp dụng vào trò chơi Caro, bao gồm:
 
-Thuật toán DFS (Depth-First Search): Thể hiện quá trình tìm kiếm theo chiều sâu, khám phá một nhánh càng sâu càng tốt trước khi quay lui.
-Thuật toán BFS (Breadth-First Search): Thể hiện quá trình tìm kiếm theo chiều rộng, khám phá tất cả các trạng thái ở một độ sâu nhất định trước khi chuyển sang độ sâu tiếp theo.
-Thuật toán Backtracking: Thể hiện quá trình thử và sai, quay lui khi gặp phải trạng thái không dẫn đến mục tiêu.
-(Các hình ảnh gif minh họa quá trình thực thi của các thuật toán này đã được ghi lại trong quá trình thử nghiệm với môi trường PyGame-Caro.)
-
 2.1.4. Một vài nhận xét về hiệu suất của các thuật toán trong nhóm này
 Qua quá trình thử nghiệm với trò chơi Caro trong môi trường PyGame, chúng tôi rút ra một số nhận xét:
 
