@@ -1,7 +1,6 @@
 import heapq
 import numpy as np
 from Function.checkWin import checkWin
-from Function.MarkSquare import markSquare
 from Score.CaroEvaluator.CaroEvaluator20x20 import CaroEvaluator20x20
 class EvaluatedAStar:
     def __init__(self, board, boardRows, boardCols):
@@ -13,7 +12,6 @@ class EvaluatedAStar:
     
     def evaluate(self, player):
         return self.evaluator.evaluate(self.board, player, self.boardRows, self.boardCols)
-    
 
 def evaluatedAStar(checkBoard,player, boardRows,boardCols):
     myEvaluator = EvaluatedAStar(checkBoard, boardRows, boardCols)
