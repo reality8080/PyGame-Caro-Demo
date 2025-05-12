@@ -11,12 +11,9 @@ df_grouped = df.groupby("Algorithm").mean().reset_index()
 
 plt.figure(figsize=(12, 6))
 
-plt.plot(df_grouped["Algorithm"], df_grouped["Elapsed Time (s)"],
-         marker='o', label="Thời gian (s)")
-plt.plot(df_grouped["Algorithm"],
-         df_grouped["RAM Used (MB)"], marker='s', label="RAM (MB)")
-plt.plot(df_grouped["Algorithm"],
-         df_grouped["ROM Used (GB)"], marker='^', label="ROM (GB)")
+plt.plot(df_grouped["Algorithm"], df_grouped["Elapsed Time (s)"],marker='o', label="Thời gian (s)")
+plt.plot(df_grouped["Algorithm"],df_grouped["RAM Used (MB)"], marker='s', label="RAM (MB)")
+plt.plot(df_grouped["Algorithm"], df_grouped["ROM Used (MB)"], marker='^', label="ROM (MB)")
 
 plt.title("Hiệu năng của các thuật toán AI")
 plt.xlabel("Thuật toán")
